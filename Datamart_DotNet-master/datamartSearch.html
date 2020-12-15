@@ -1,0 +1,345 @@
+﻿<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 conftainer" ng-init="searchDatamart1()">
+    <!--partsearch starts -->
+    <div class="container table-responsive" style="height:900px">
+        <!-- <div class="container table-responsive" ng-show="UserList" style="height:900px"> -->
+        <form name="myform" novalidate>
+            <h2>
+                Search Result &nbsp;&nbsp;&nbsp;&nbsp;
+                <span>
+                    <input type="text" name="searchString" title="Do not use symbols like % or * over here" ng-model="searchString" ng-attr-placeholder="{{' Enter your search term...'}}" style="font-size:14px; min-height:36px; line-height:36px; width:400px; border-radius: 18px; border:solid 2px #878787; vertical-align:middle;" required="" pattern="[^*%]+" ng-keypress="searchDatamartfromResult($event,(myForm.$invalid),searchString)" />
+                    <md-button md-no-ink class="md-primary" ng-disabled="myform.$invalid||myform.searchString.$error.required" ng-class='{"disableButton": (myform.$invalid||myform.searchString.$error.required)}' ng-click="searchDatamart1(searchString)||expandCollapseAll( !isexpanded,datamart);isexpanded=!isexpanded">SEARCH</md-button>
+                </span>
+            </h2>
+        </form>
+        <div>
+            <table class="table  table-hover table-condensed " style="color: #000;">
+                <thead>
+                    <div style="font-weight:bold">
+                        <i ng-click="search(0);expandCollapseAll( !isexpanded.part,datamart[0].data);isexpanded.part=!isexpanded.part">
+                            <i ng-if="isexpanded.part" class="fa fa-minus"><img src="images/up.png" /></i>
+                            <i ng-if="!isexpanded.part" class="fa fa-plus"><img src="images/down.png" /></i>
+                        </i>
+                        Part Search Result ({{datamartlist[0].length}})
+                        <span ng-if="isexpanded.part">
+                            <ul class="pagination pull-right" style="margin-top:30px; margin-bottom:0px;">
+                                <li ng-class="{'active': item === datamart[0].criteria.page}" ng-repeat='item in datamart[0].paging.pagearray'>
+                                    <a ng-if="item == 'Prev'" ng-click="Prev(0)">Prev</a>
+                                    <a ng-if="(!(item == 'Prev' || item == 'Next' ||  item == '..' || item == '...'))"
+                                       ng-click="datamart[0].criteria.page = item;search(0);">{{item}}</a>
+                                    <!-- No click event -->
+                                    <a ng-if="(item == '..' || item == '...')">{{item}}</a>
+                                    <a ng-if="item == 'Next'" ng-click="Next(0)">Next</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                    <tr></tr>
+
+                    <tr ng-if="isexpanded.part">
+                        <th>
+                            Part Number
+                            <span class="fa fa-sort" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('itemtype')">
+                            Part Description
+                            <span class="fa fa-sort" ng-show="sortKey=='itemtype'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('revision')">
+                            Part Revision
+                            <span class="fa fa-sort" ng-show="sortKey=='revision'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('dcoid')">
+                            Document Number
+                            <span class="fa fa-sort" ng-show="sortKey=='drawingid'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('datereleased')">
+                            Site
+                            <span class="fa fa-sort" ng-show="sortKey=='datereleased'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="table">
+                    <tr class="animate" ng-if="isexpanded.part" ng-repeat-start="user in datamart[0].data">
+
+                        <td>
+                            <a class="two" data-target="#myModal" data-toggle="modal" ng-click="sendtopartOnly(user.itemid)">
+                                <md-tooltip md-direction="left">Refresh</md-tooltip>{{user.itemid}} <md-tooltip md-direction="bottom">View Details</md-tooltip>
+                            </a>
+                        </td>
+                        <td>{{user.description}}</td>
+
+                        <td>{{user.revision}}</td>
+                        <td ng-if="user.drawingid" ng-click="sendtodoc(user.drawingid)"><a>{{user.drawingid}}</a></td>
+                        <td ng-if="!user.drawingid">&nbsp;</td>
+                        <td>{{user.site}}</td>
+                    </tr>
+                    <tr ng-repeat-end=""></tr>
+                </tbody>
+
+            </table>
+        </div>
+        <!--partsearch ends -->
+        <!--dOC sEARCH STARTS -->
+        <div>
+            <table class="table  table-hover table-condensed " style="color: #000;">
+
+                <thead>
+                    <div style="font-weight:bold">
+                        <i ng-click="search(1);expandCollapseAll( !isexpanded.doc,datamart[1].data);isexpanded.doc=!isexpanded.doc">
+                            <i ng-if="isexpanded.doc" class="fa fa-minus"><img src="images/up.png" /></i>
+                            <i ng-if="!isexpanded.doc" class="fa fa-plus"><img src="images/down.png" /></i>
+
+
+                        </i>
+                        Document Search Result ({{datamartlist[1].length}})
+                        <span ng-if="isexpanded.doc">
+                            <ul class="pagination pull-right" style="margin-top:30px; margin-bottom:0px;">
+                                <li ng-class="{'active': item === datamart[1].criteria.page}" ng-repeat='item in datamart[1].paging.pagearray'>
+                                    <a ng-if="item == 'Prev'" ng-click="Prev(1)">Prev</a>
+                                    <a ng-if="(!(item == 'Prev' || item == 'Next' ||  item == '..' || item == '...'))"
+                                       ng-click="datamart[1].criteria.page = item;search(1);">{{item}}</a>
+                                    <!-- No click event -->
+                                    <a ng-if="(item == '..' || item == '...')">{{item}}</a>
+                                    <a ng-if="item == 'Next'" ng-click="Next(1)">Next</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                    <tr ng-if="isexpanded.doc">
+                        <th>
+                            Document Number
+                            <span class="fa fa-sort" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('description')">
+                            Document Description
+                            <span class="fa fa-sort" ng-show="sortKey=='description'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('revision')">
+                            Document Revision
+                            <span class="fa fa-sort" ng-show="sortKey=='revision'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('itemid')">
+                            Part Number
+                            <span class="fa fa-sort" ng-show="sortKey=='itemid'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('site')">
+                            Site
+                            <span class="fa fa-sort" ng-show="sortKey=='site'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('datereleased')">
+                            Date Release
+                            <span class="fa fa-sort" ng-show="sortKey=='datereleased'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="table">
+                    <tr ng-if="isexpanded.doc" class="animate" ng-repeat-start="user in datamart[1].data">
+
+                        <td>
+                            <a class="two" data-toggle="modal" data-target="#myModal" ng-click="sendtodoc(user.drawingid)"><md-tooltip md-direction="left">Refresh</md-tooltip>{{user.drawingid}}<span ng-if='user.drawingid'><md-tooltip md-direction="bottom">View Details</md-tooltip></a>
+                        </td>
+                        <td>{{user.description}}</td>
+                        <td>{{user.docrevision}}</td>
+                        <td>{{user.itemid}}</td>
+                        <td>{{user.site}}</td>
+                        <td>{{user.datereleased}}</td>
+                    </tr>
+                    <tr ng-repeat-end=""></tr>
+                </tbody>
+            </table>
+        </div>
+        <!--dOC sEARCH ends -->
+        <!--Led search starts -->
+        <div>
+            <table class="table  table-hover table-condensed " style="color: #000;">
+                <thead>
+                    <div style="font-weight:bold">
+                        <i ng-click="search(2);expandCollapseAll( !isexpanded.lift,datamart[2].data);isexpanded.lift=!isexpanded.lift">
+                            <i ng-if="isexpanded.lift" class="fa fa-minus"><img src="images/up.png" /></i>
+                            <i ng-if="!isexpanded.lift" class="fa fa-plus"><img src="images/down.png" /></i>
+
+
+                        </i>
+                        Lifting Equipment Search Result ({{datamartlist[2].length}})
+                        <span ng-if="isexpanded.lift">
+                            <ul class="pagination pull-right" style="margin-top:30px; margin-bottom:0px;">
+                                <li ng-class="{'active': item === datamart[2].criteria.page}" ng-repeat='item in datamart[2].paging.pagearray'>
+                                    <a ng-if="item == 'Prev'" ng-click="Prev(2)">Prev</a>
+                                    <a ng-if="(!(item == 'Prev' || item == 'Next' ||  item == '..' || item == '...'))"
+                                       ng-click="datamart[2].criteria.page = item;search(2);">{{item}}</a>
+                                    <!-- No click event -->
+                                    <a ng-if="(item == '..' || item == '...')">{{item}}</a>
+                                    <a ng-if="item == 'Next'" ng-click="Next(2)">Next</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                    <tr ng-if="isexpanded.lift">
+                        <th ng-click="criteria.sort = 'LEDItemID';">
+
+                            Part Number
+
+                            <span class="fa fa-sort" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('revision')">
+                            Description
+
+                            <span class="fa fa-sort" ng-show="sortKey=='revision'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('itemtype')">
+                            Document Number
+
+                            <span class="fa fa-sort" ng-show="sortKey=='Synopsis'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('itemname')">
+                            Revision
+                            <span class="fa fa-sort" ng-show="sortKey=='description'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('itemname')">
+                            DCO
+                            <span class="fa fa-sort" ng-show="sortKey=='description'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('itemname')">
+                            site
+                            <span class="fa fa-sort" ng-show="sortKey=='description'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="table">
+                    <tr class="animate" ng-if="isexpanded.lift" ng-repeat-start="user in datamart[2].data ">
+                        <td ng-if="user.LEDItemID" ng-click="sendtoLED(user.LEDItemID)"><a>{{user.LEDItemID}}</a></td>
+                        <td>{{user.description}}</td>
+                        <td><a ng-click="sendtodoc(user.drawingid)">{{user.drawingid}}</a></td>
+                        <td>{{user.revision}}</td>
+                        <td>{{user.dco}}</td>
+                        <td>{{user.site}}</td>
+                    </tr>
+                    <tr ng-repeat-end=""></tr>
+                </tbody>
+            </table>
+        </div>
+        <!--Led search ends -->
+        <!--pcn search starts-->
+        <div>
+            <table class="table  table-hover table-condensed " style="color: #000;">
+                <thead>
+                    <div style="font-weight:bold">
+                        <i ng-click="search(3);expandCollapseAll( !isexpanded.pc,datamart[3].data);isexpanded.pc=!isexpanded.pc">
+                            <i ng-if="isexpanded.pc" class="fa fa-minus"><img src="images/up.png" /></i>
+                            <i ng-if="!isexpanded.pc" class="fa fa-plus"><img src="images/down.png" /></i>
+                        </i>
+                        PCN Search Result ({{datamartlist[3].length}})
+                        <span ng-if="isexpanded.pc">
+                            <ul class="pagination pull-right" style="margin-top:30px; margin-bottom:0px;">
+                                <li ng-class="{'active': item === datamart[3].criteria.page}" ng-repeat='item in datamart[3].paging.pagearray'>
+                                    <a ng-if="item == 'Prev'" ng-click="Prev(3)">Prev</a>
+                                    <a ng-if="(!(item == 'Prev' || item == 'Next' ||  item == '..' || item == '...'))"
+                                       ng-click="datamart[3].criteria.page = item;search(3);">{{item}}</a>
+                                    <!-- No click event -->
+                                    <a ng-if="(item == '..' || item == '...')">{{item}}</a>
+                                    <a ng-if="item == 'Next'" ng-click="Next(3)">Next</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                    <tr ng-if="isexpanded.pc">
+                        <th ng-click="criteria.sort = 'pcnid';">
+                            PCN Number
+                            <span class="fa fa-sort" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('revision')">
+                            PCN Revision
+                            <span class="fa fa-sort" ng-show="sortKey=='revision'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('itemtype')">
+                            Synopsis
+                            <span class="fa fa-sort" ng-show="sortKey=='Synopsis'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('itemname')">
+                            PCN Description
+                            <span class="fa fa-sort" ng-show="sortKey=='description'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="table">
+                    <tr class="animate" ng-if="isexpanded.pc" ng-repeat-start="user in datamart[3].data">
+                        <td ng-if="user.pcnid" ng-click="sendtoPCN(user.pcnid)"><a>{{user.pcnid}}</a></td>
+                        <td width="10%"> {{user.revision}}</td>
+                        <td width="20%">{{user.synopsis}}</td>
+                        <td width="55%">{{user.description}}</td>
+                    </tr>
+                    <tr ng-repeat-end=""></tr>
+                </tbody>
+            </table>
+        </div>
+        <!--pcn search ends-->
+        <!--eto search strats-->
+        <div>
+            <table class="table  table-hover table-condensed " style="color: #000;">
+                <thead>
+                    <div style="font-weight:bold">
+                        <i ng-click="search(4);expandCollapseAll( !isexpanded.et,datamart[4].data);isexpanded.et=!isexpanded.et">
+                            <i ng-if="isexpanded.et" class="fa fa-minus"><img src="images/up.png" /></i>
+                            <i ng-if="!isexpanded.et" class="fa fa-plus"><img src="images/down.png" /></i>
+                        </i>
+                        ETO Search Result({{datamartlist[4].length}})
+                        <span ng-if="isexpanded.et">
+                            <ul class="pagination pull-right" style="margin-top:30px; margin-bottom:0px;">
+                                <li ng-class="{'active': item === datamart[4].criteria.page}" ng-repeat='item in datamart[4].paging.pagearray'>
+                                    <a ng-if="item == 'Prev'" ng-click="Prev(4)">Prev</a>
+                                    <a ng-if="(!(item == 'Prev' || item == 'Next' ||  item == '..' || item == '...'))"
+                                       ng-click="datamart[4].criteria.page = item;search(4);">{{item}}</a>
+                                    <!-- No click event -->
+                                    <a ng-if="(item == '..' || item == '...')">{{item}}</a>
+                                    <a ng-if="item == 'Next'" ng-click="Next(4)">Next</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                    <tr ng-if="isexpanded.et">
+                        <th ng-click="criteria.sort = 'itemid';">
+                            ETO Number
+                            <span class="fa fa-sort" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('itemname')">
+                            Project Name
+                            <span class="fa fa-sort" ng-show="sortKey=='itemname'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('itemtype')">
+                            Order Number
+                            <span class="fa fa-sort" ng-show="sortKey=='itemtype'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('revision')">
+                            Revision
+                            <span class="fa fa-sort" ng-show="sortKey=='revision'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('revision')">
+                            Customer Name
+                            <span class="fa fa-sort" ng-show="sortKey=='revision'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="table">
+                    <tr class="animate" ng-if="isexpanded.et" ng-repeat-start="user in datamart[4].data ">
+                        <td ng-if="user.etoid" ng-click="sendtoETO(user.etoid)"><a>{{user.etoid}}</a></td>
+                        <td>{{user.projectname}}</td>
+
+                        <td>{{user.weirorderno}}</td>
+                        <td>{{user.revision}}</td>
+                        <td>{{user.customer}}</td>
+
+                    </tr>
+                    <tr ng-repeat-end=""></tr>
+                </tbody>
+            </table>
+        </div>
+        <br></br>
+        <div class="row" style="background:#005eb8;height:40px;color:white;text-align:center; padding-top:8px;">
+            <div class="col-md-12">
+                <span>Showing: Top 100 records from each categories</span>
+            </div>
+
+        </div>
+        <!--eto search ends -->
+    </div>
+</div>

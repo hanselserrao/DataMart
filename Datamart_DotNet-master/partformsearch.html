@@ -1,0 +1,214 @@
+﻿<md-dialog ng-app="app" ng-controller="ctrl" style="height:auto !important">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Part Details</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="hide()">
+                <md-icon class="fa fa-close" aria-label="Close dialog"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        
+        <table class="table table-striped" style="color: #000;    font-size: 10px">
+            <thead class="thead-dark">
+                <tr>
+                    <th tabindex="0">
+                        Part Number
+                    </th>
+                    <th tabindex="0">
+                        Part Name
+                    </th>
+                    <th tabindex="0">
+                        PartType
+                    </th>
+                    <th tabindex="0">
+                        Part Revision
+                    </th>
+                    <th tabindex="0">
+                        Part Document
+                    </th>
+                    <th tabindex="0">
+                        Date Release
+                    </th>
+                    <th tabindex="0">
+                        Part Status
+                    </th>
+                </tr>
+                <tr>
+                    <td>{{ctrl.items[0].itemid}}</td>
+                    <td>{{ctrl.items[0].itemname}}</td>
+                    <td>{{ctrl.items[0].itemtype}}</td>
+                    <td>{{ctrl.items[0].revision}}</td>
+                    <td>{{ctrl.items[0].dcoid}}</td>
+                    <td>{{ctrl.items[0].datereleased}}</td>
+                    <td>{{ctrl.items[0].name}}</td>
+
+                </tr>
+
+            </thead>
+            <tbody id="table" ng-app="app" ng-controller="ctrl">
+
+                <tr>
+                    <th>Part Description:</th>
+                    <th>Legacy Part Number:</th>
+                    <th>Legacy Document Number:</th>
+                    <th>Tech Group:</th>
+                    <th>Length:</th>
+                    <th>Height:</th>
+                    <th>Width:</th>
+                </tr>
+                <tr>
+                    <td>{{ctrl.items[0].description}}</td>
+                    <td>{{ctrl.items[0].legacy_part_number}}</td>
+                    <td>{{ctrl.items[0].legacy_document_number}}</td>              
+                    <td>{{ctrl.items[0].dcoid}}</td>
+                    <td>{{ctrl.items[0].length}}</td>
+                    <td>{{ctrl.items[0].height}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Document Details</h2>
+            </div>
+        </md-toolbar>
+        <table class="table table-striped" style="color: #000;    font-size: 10px">
+            <thead class="thead-dark">
+                <tr>
+                    <th tabindex="0">
+                        Document Name
+                    </th>
+                    <th tabindex="0">
+                        Document Type
+                    </th>
+                    <th tabindex="0">
+                        Document Description
+                    </th>
+                    <th tabindex="0">
+                        Document Status
+                    </th>
+                </tr>
+                <tr>
+                    <td>{{ctrl.items[0].document_itemname}}</td>
+                    <td>{{ctrl.items[0].doctype}}</td>
+                    <td>{{ctrl.items[0].document_itemid}}</td>
+                    <td>{{ctrl.items[0].docstatus}}</td>
+                </tr>
+            </thead>
+        </table>
+
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>PCN Details</h2>
+            </div>
+        </md-toolbar>
+        <table class="table table-striped" style="color: #000;    font-size: 10px">
+            <thead class="thead-dark">
+                <tr>
+                    <th tabindex="0">
+                        PCN Number
+                    </th>
+                    <th tabindex="0">
+                        Part Revision
+                    </th>
+                    <th tabindex="0">
+                        Synopsis
+                    </th>
+                    <th tabindex="0">
+                        PCN Description
+                    </th>
+                    <th tabindex="0">
+                        Problem Part
+                    </th>
+                    <th tabindex="0">
+                        Problem Part Revision
+                    </th>
+                    <th tabindex="0">
+                        Solution Part
+                    </th>
+                    <th tabindex="0">
+                        Solution Part Revision
+                    </th>
+                    <th tabindex="0">
+                        Impacted Part
+                    </th>
+                    <th tabindex="0">
+                        Impacted Part Revision
+                    </th>
+                </tr>
+                <tr>
+                    <td>{{ctrl.items[0].pcnid}}</td>
+                    <td>{{ctrl.items[0].revision}}</td>
+                    <td>{{ctrl.items[0].synopsis}}</td>
+                    <td>{{ctrl.items[0].pcndescription}}</td>
+                    <td>{{ctrl.items[0].problemitem_iid}}</td>
+                    <td></td>
+                    <td>{{ctrl.items[0].solutionitem_iid}}</td>
+                    <td></td>
+                    <td>{{ctrl.items[0].impacteditem_iid}}</td>
+                    <td></td>
+
+                </tr>
+            </thead>
+        </table>
+
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>ETO Details</h2>
+            </div>
+        </md-toolbar>
+        <table class="table table-striped" style="color: #000;    font-size: 12px">
+            <thead class="thead-dark">
+                <tr>
+                    <th tabindex="0">
+                        ETO Number
+                    </th>
+                    <th tabindex="0">
+                        Project Name
+                    </th>
+                    <th tabindex="0">
+                        Order Number
+                    </th>
+                    <th tabindex="0">
+                        Customer Name
+                    </th>
+                    <th tabindex="0">
+                        GA Drawing
+                    </th>
+                    <th tabindex="0">
+                        Document
+                    </th>
+                    <th tabindex="0">
+                        Routing
+                    </th>
+                    <th tabindex="0">
+                        Order Part
+                    </th>
+                    <th tabindex="0">
+                        References
+                    </th>
+                </tr>
+                <tr>
+                    <!--<td>{{ctrl.items[0].pcnid}}</td>
+                    <td>{{ctrl.items[0].revision}}</td>
+                    <td>{{ctrl.items[0].synopsis}}</td>
+                    <td>{{ctrl.items[0].pcndescription}}</td>
+                    <td>{{ctrl.items[0].problemitem_iid}}</td>
+                    <td></td>
+                    <td>{{ctrl.items[0].solutionitem_iid}}</td>
+                    <td></td>
+                    <td>{{ctrl.items[0].impacteditem_iid}}</td>
+                    <td></td>-->
+
+                </tr>
+            </thead>
+        </table>
+    </md-dialog-content>
+   
+</md-dialog>
+
+
+

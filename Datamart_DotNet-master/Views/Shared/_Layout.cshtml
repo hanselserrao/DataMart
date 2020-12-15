@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title ng-bind='"Datamart - "+title'></title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+    <link href="~/Content/angular-material.css" rel="stylesheet" />
+    @*<link href="~/Content/autocomplete.css" rel="stylesheet" />*@
+    <link href="~/Content/loading-bar.css" rel="stylesheet" />
+    <link href="~/Content/style.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-min.js"></script>
+    <script src="~/Scripts/main.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/moment-with-locales.min.js"></script>
+    <script src="~/Scripts/angular-route.js"></script>
+    <script src="~/Scripts/angular-material.js"></script>
+    <script src="~/Scripts/angular-animate.min.js"></script>
+    <script src="~/Scripts/angular-sanitize.min.js"></script>    
+    <script src="~/Scripts/angular-aria.min.js"></script>
+    <script src="~/Scripts/loading-bar.js"></script>
+    <script src="~/Scripts/autocomplete.js"></script>
+    <script src="~/Scripts/dirPagination.js"></script>
+    @*<script src="~/Scripts/component.js"></script>*@
+    <script src="~/Scripts/util.js"></script>
+
+    @*@Scripts.Render("~/bundles/modernizr")*@
+</head>
+<body data-ng-app="app" data-ng-controller="mainCtrl" style="font-family:'Times New Roman'">
+    @*<div class="preloader" style="display: none;">
+            <svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"> </circle>
+            </svg>
+        </div>*@
+    <nav class="navbar navbar-inverse">
+            <div class="navbar-header">
+                <a class="navbar-brand"><img class="logo1" src="~/images/logo11.jpg" /></a>
+            </div>
+        <div class="container-fluid">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="navbar-brand"><i>(GPDM data uploaded date: {{AuthValue.etllastupdate}})</i></li>
+                <li style="cursor: pointer;">
+                    <a ng-click="logout()" ng-show="(AuthValue.role.indexOf('Anonymous') == -1)" Title="Logout" class="navbar-brand"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;LogOut</a>
+                    <a href="#login" ng-show="(AuthValue.role.indexOf('Anonymous') != -1)" Title="Login" class="navbar-brand"><span class="glyphicon glyphicon-user"></span>&nbsp;Login</a>
+                </li>
+                <li><a Title="Help" href="Help.html" target="Help" class="navbar-brand">Help</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    @RenderBody()
+
+
+    <div class="modal fade" id="passwordModal" ng-controller="loginCtrl" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <md-content layout="row" layout-align="space-around" layout-padding="layout-padding" style="color: none !important;  background-color: none !important; " ng-cloak="ng-cloak" class="login-form">
+                <md-card flex="flex" flex-gt-sm="100" flex-gt-md="100">
+                    <md-card-content>
+                        <form>
+                            <md-card-content>
+                                <div class="col-md-12">
+                                    <label class="col-md-4"><h4>Username</h4></label>
+                                    <md-input-container style="width: 65%;">
+                                        <input type="Email" name="Email" placeholder="Email address" ng-model="email" value="admin@admin.com" minlength="8" required="" />
+                                    </md-input-container>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="col-md-4"><h4>Password</h4></label>
+                                    <md-input-container style="width: 65%;">
+                                        <input type="password" name="Password" ng-keypress="loginter($event)" ng-model="password" value="password" placeholder="8-16 chars,text,symbols,digits" required="" />
+                                    </md-input-container>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <center>
+                                        <!--//KAMLESH-ROLE-->
+                                        <md-button type="button" ng-click="login()" class="md-raised md-primary">&nbsp; Login &nbsp;</md-button>
+                                        <md-button type="button" id="close-modal" class="md-raised md-primary" data-dismiss="modal">&nbsp; Cancel &nbsp;</md-button>
+                                        <span ng-show="errordiv" style="color:{{color}}">{{errormsg}}</span>
+                                    </center>
+                                </div>
+                            </md-card-content>
+                        </form>
+                    </md-card-content>
+                </md-card>
+            </md-content>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-bottom">
+            <div class="row">
+                <div class="col-md-2"><h5>© 2018 Weir Minerals.</h5> </div>
+                <div class="col-md-7"></div>
+                <div class="col-md-1">  <a href="Term.html" target="Term"><h5> Terms</h5></a></div>
+                <div class="col-md-2"><a href="Privacy.html" target="Privacy"><h5>Privacy & Cookies</h5></a></div>
+
+            </div>
+        </div>
+
+    </footer>
+
+    <script src="~/Scripts/appmodule.js"></script>
+    <script src="~/Scripts/Service/service.js"></script>
+    <script src="~/Scripts/Controller/LoginController.js"></script>
+    <script src="~/Scripts/Controller/MainController.js"></script>
+    <script src="~/Scripts/Controller/Home/IndexController.js"></script>
+    <script src="~/Scripts/Controller/Admin/IndexController.js"></script>
+    <script src="~/Scripts/Controller/AMR/IndexController.js"></script>
+    @*@Scripts.Render("~/bundles/appmodule")*@
+</body>
+</html>

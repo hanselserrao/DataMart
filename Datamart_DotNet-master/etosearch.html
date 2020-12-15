@@ -1,0 +1,301 @@
+﻿<div class="container-fluid">
+    <!--<div class="row">
+        <div class="col-md-9"> <img class="logo" src="/images/logo.png" /> </div>
+        <div class="col-md-3 pull-right">
+            <ul>
+                <li style="color:white;list-style-type:none;float:left;padding-right: 10px;">
+                    <a style="color:black;" ng-show="username" ng-click="logout()">
+                        Welcome
+                        {{user}}
+                    </a>
+                </li>
+                <li style="color:white;list-style-type:none;margin-top:20px">
+                    <a style="color:black;" ng-click="logout()">
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>-->
+</div>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 container">
+    <form>
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>Engineering To Order Search</h1>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div layout="row">
+                <md-input-container flex="100">
+                    <label for="input_eto_id">Engineering To Order Number</label>
+                    <input name="clientName" data-toggle="tooltip" title="Identifier of the Engineering To Order object in GPDM" id="input_eto_id" ng-keypress="EtosearchformEnter($event)" ng-model="etoNumber">
+                </md-input-container>
+                <!--@*<md-input-container flex="100">
+                    <label>ETO Number</label>
+                    <autocomplete ng-model="etoNumber" attr-placeholder="Type to search ETO number..." click-activation="true" data="etonumber" on-type="searcheto" on-select=""></autocomplete>
+                    <img class="spinner" ng-show="spinner" src="~/images/loader.gif" />
+                </md-input-container>*@-->
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div layout="row">
+                <md-input-container flex="100">
+                    <label>System GA/Plant Layout</label>
+                    <input name="clientName" data-toggle="tooltip" title="Engineering part number of Plant layout / GA" ng-model="gaGrowing" ng-keypress="EtosearchformEnter($event)">
+                </md-input-container>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div layout="row">
+                <md-input-container flex="100">
+                    <label>Project Name</label>
+                    <input name="clientName" data-toggle="tooltip" title="Unique project identifier that identifies project" ng-model="projectName" ng-keypress="EtosearchformEnter($event)">
+                </md-input-container>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div layout="row">
+                <md-input-container flex="100">
+                    <label>Order Number</label>
+                    <input name="clientName" data-toggle="tooltip" title="ERP order number identifier" ng-model="orderNumber" ng-keypress="EtosearchformEnter($event)">
+                    <div ng-messages="projectForm.clientName.$error">
+                        <div ng-message="required">This is required.</div>
+                    </div>
+                </md-input-container>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div layout="row">
+                <md-input-container flex="100">
+                    <label>Customer Name</label>
+                    <input name="clientName" data-toggle="tooltip" title="Name of the Customer" ng-model="customerName" ng-keypress="EtosearchformEnter($event)">
+                    <div ng-messages="projectForm.clientName.$error">
+                        <div ng-message="required">This is required.</div>
+                    </div>
+                </md-input-container>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div layout="row">
+                <md-input-container flex="100">
+                    <label>Engineering Documentation</label>
+                    <input name="clientName" data-toggle="tooltip" title="Engineering product documents related to this order" ng-keypress="EtosearchformEnter($event)" ng-model="document">
+                </md-input-container>
+            </div>
+        </div>
+        <!--<div class="col-sm-6">
+            <div layout="row">
+                <md-input-container flex="100">
+                    <label>Routing </label>
+                    <input name="clientName" ng-keypress="EtosearchformEnter($event)" ng-model="routing">
+                </md-input-container>
+            </div>
+        </div>-->
+        <div class="col-sm-6">
+            <div layout="row">
+                <md-input-container flex="100">
+                    <label>Order Parts</label>
+                    <input name="clientName" data-toggle="tooltip" title="All BOM headers which are the part of this order" ng-keypress="EtosearchformEnter($event)" ng-model="orderParts">
+                </md-input-container>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div layout="row">
+                <md-input-container flex="100">
+                    <label>Engineering To Order References</label>
+                    <input name="clientName" data-toggle="tooltip" title="Reference documents or manuals" ng-keypress="EtosearchformEnter($event)" ng-model="reference">
+                </md-input-container>
+            </div>
+        </div>
+        <!--<div class="col-sm-6">
+            <div layout="row">
+                <md-input-container flex="100">
+                    <label hidden>References </label>
+                    <input hidden name="clientName" ng-keypress="EtosearchformEnter($event)">
+                </md-input-container>
+            </div>
+        </div>-->
+        <div class="row search_button">
+            <div class="col-sm-12">
+
+                <div class="col-sm-4">
+                    <md-button md-no-ink type="reset" ng-click="resetETOValue()" class="md-raised">CLEAR</md-button>
+                </div>
+
+                <div class="col-sm-4">
+                    <md-button md-no-ink ng-click="Etosearchform()" class="md-raised md-primary etobtn">SEARCH</md-button>
+                </div>
+                <div class="col-sm-4">
+                    <div align="right">(Asterisk(*) can be used to perform wildcard searches) </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <div class="container table-responsive scrollArea" ng-show="list4" style="height:900px">
+        <div>
+            <ul class="pagination pull-right">
+                <li ng-class="{'active': item === criteria.page}" ng-repeat='item in paging.pagearray'>
+
+                    <a ng-if="item == 'Prev'" ng-click="pagelistClick(etodatalist); Prev()">Prev</a>
+
+                    <a ng-if="(!(item == 'Prev' || item == 'Next' ||  item == '..' || item == '...'))"
+                        ng-click="pagelistClick(etodatalist); criteria.page = item;">{{item}}</a>
+
+                    <!-- No click event -->
+                    <a ng-if="(item == '..' || item == '...')">{{item}}</a>
+
+                    <a ng-if="item == 'Next'" ng-click="pagelistClick(etodatalist); Next()">Next</a>
+                </li>
+            </ul>
+        </div>
+        <h2 ng-init="search()">Search Result</h2>
+        <!--@*<div layout="row">
+            <md-input-container flex="100" ng-init="search()">
+                <label>Search keyword...</label>
+                <input ng-model="criteria.searchtext" ng-model-options="{debounce {'default' 1000, 'blur'0}}">
+            </md-input-container>
+        </div>*@-->
+
+
+        <table class="table  table-hover table-condensed " style="color: #000;">
+            <thead>
+                <tr>
+                    <div class="row" style="background-color:#005eb8; padding:7px;color:white">
+                        <div class="col-lg-4 ">
+                            Showing: {{ etodatalist.length>0?(criteria.page -1) * criteria.pagesize + 1:0}} -
+                            {{ etodatalist.length>0?((criteria.page -1) * criteria.pagesize + paging.showing):0}}
+                            of {{paging.total}} Records
+                        </div>
+
+                        <div class="col-lg-3">
+                           Showing: Top  {{paging.total}} count of total records
+                        </div>
+                        <div class="col-lg-5 ">
+                            <div class="pull-right">
+                                Page: <input type='number'
+                                             ng-model='criteria.page'
+                                             min="1"
+                                             max="{{paging.totalpages}}"
+                                             style='width:70px;' />
+                                of {{paging.totalpages}}
+                                with page size <select ng-model="criteria.pagesize"
+                                                       ng-options="obj as obj for obj in paging.pagingOptions" />
+                            </div>
+                        </div>
+                    </div>
+
+                </tr>
+                <tr>
+                    <th ng-click="criteria.sort = 'itemid';">
+                        <i ng-click="expandCollapseAll( !isexpanded,etodatalist);isexpanded=!isexpanded">
+                            <i ng-if="isexpanded" class="fa fa-minus"><img src="images/up.png" /></i>
+                            <i ng-if="!isexpanded" class="fa fa-plus"><img src="images/down.png" /></i>
+                        </i>
+                        ETO Number
+                        <span class="fa fa-sort" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('itemname')">
+                        Project Name
+                        <span class="fa fa-sort" ng-show="sortKey=='itemname'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('itemtype')">
+                        Order Number
+                        <span class="fa fa-sort" ng-show="sortKey=='itemtype'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('revision')">
+                        Revision
+                        <span class="fa fa-sort" ng-show="sortKey=='revision'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('revision')">
+                        Customer Name
+                        <span class="fa fa-sort" ng-show="sortKey=='revision'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="table">
+                <tr class="animate" ng-repeat-start="user in etodatalist">
+                    <!--@*
+                    <tr class="animate" dir-paginate-start="user in itemlist|orderBy:sortBy:reverse|filter:search|productsPerPage:10">
+                        *@-->
+
+                    <td>
+                        <i ng-if="user.expanded" ng-click="user.expanded = false" class="fa fa-minus"><img src="images/up.png" /></i>
+                        <i ng-if="!user.expanded" ng-click="user.expanded = true" class="fa fa-plus"><img src="images/down.png" /></i>
+                        {{user.etoid}}
+                        <!--@*&nbsp;&nbsp; <a   class="two"><md-tooltip md-direction="left">Refresh</md-tooltip> <md-tooltip md-direction="bottom">View Details</md-tooltip></a>*@-->
+                    </td>
+                    <td>{{user.projectname}}</td>
+                  
+                    <td>{{user.weirorderno}}</td>
+                    <td>{{user.revision}}</td>
+                    <td>{{user.customer}}</td>
+                    <tr ng-if="user.expanded" ng-repeat-end="">
+                    <th colspan="9" style="background: #fff;">
+                        <table colspan="9">
+                            <thead>
+                                <tr>&nbsp; &nbsp;&nbsp; &nbsp;<th>Engineering Documentation</th>&nbsp; &nbsp;&nbsp; &nbsp;<th>System GA/Plant Layout</th>&nbsp; &nbsp;&nbsp; &nbsp;<th>Order Parts</th>&nbsp; &nbsp;&nbsp; &nbsp;<th>ETO References</th> </tr>
+                                <tr>
+                                    &nbsp; &nbsp;&nbsp; &nbsp;
+                                    <th>
+                                        <span title="{{itst}}" ng-repeat="itst in user.documentref| split:',':0" ng-click="sendtodoc1(itst)">
+                                            <a>{{itst}} </a>
+                                            <br />
+                                        </span>
+                                    </th>
+                                    &nbsp; &nbsp;&nbsp; &nbsp;
+
+                                    <th>
+                                        <span title="{{yyu}}" ng-repeat="yyu in user.gadrawingref| split:',':0" ng-click="sendtopart(yyu)"><a>{{yyu}}</a><br /></span>
+                                    </th>
+                                    &nbsp; &nbsp;&nbsp; &nbsp;
+                                    <th>
+                                        <span title="{{itt}}" ng-repeat="itt in user.orderpartref| split:',':0">{{itt}} <br /> </span>
+                                    </th>
+                                    &nbsp; &nbsp;&nbsp; &nbsp;
+
+                                    <!-- <td><span ng-repeat="yy in user.etodetail[0].routing| split:',':0">{{yy}} <br /></span></td>-->
+
+                                    <th>
+                                        <span title="{{it}}" ng-repeat="it in user.referenceref| split:',':0">{{it}}<br /></span>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </th>
+                </tr>
+
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="pull-right">
+                <ul class="pagination">
+                    <li ng-class="{'active': item === criteria.page}" ng-repeat='item in paging.pagearray'>
+
+                        <a ng-if="item == 'Prev'" ng-click="pagelistClick(etodatalist); Prev()">Prev</a>
+
+                        <a ng-if="(!(item == 'Prev' || item == 'Next' ||  item == '..' || item == '...'))"
+                           ng-click="pagelistClick(etodatalist); criteria.page = item;">{{item}}</a>
+
+                        <!-- No click event -->
+                        <a ng-if="(item == '..' || item == '...')">{{item}}</a>
+
+                        <a ng-if="item == 'Next'" ng-click="pagelistClick(etodatalist); Next()">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>  
+
+
+<script>
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();   
+    });
+    </script>

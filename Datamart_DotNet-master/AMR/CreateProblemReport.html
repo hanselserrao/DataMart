@@ -1,0 +1,469 @@
+﻿<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 container">
+    <div class="row">
+        <div class="col-sm-10">
+            <h1>Create Problem Report for {{amrType.name}}</h1>
+        </div>
+        <div class="col-sm-2">
+            <md-button type="button" href="#/AMR/index" class="md-raised secondButton">
+                &nbsp;  Search Problem Report
+                &nbsp;
+            </md-button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <h7>&nbsp;</h7>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <div layout="row">
+                <md-input-container flex="100">
+                </md-input-container>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div layout="row">
+                <md-input-container flex="100" ng-init="getamrtype()">
+                    <label>Problem Report Type</label>
+                    <md-select name="amrType" ng-model="amrType" ng-change="SetAMRType(amrType)">
+                        <md-option ng-repeat="x in amrtypelist" ng-value="x">{{x.name}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div layout="row">
+                <md-input-container flex="100">
+                </md-input-container>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="row">
+            <div class="col-sm-12">
+                <h7>&nbsp;</h7>
+            </div>
+        </div>
+    </div>
+    <div ng-show="amrData == 'AMR Request'">
+        <form name="myForm" novalidate>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100">
+                            <label>Requestor</label>
+                            <input type="Email" pattern=".+@mail.weir" name="userEmail" ng-model="userEmail" required="" placeholder="email@mail.weir" />
+                            <span style="color:red; text-align:right; display:block; width: 450px;" ng-show="myForm.userEmail.$dirty || myForm.userEmail.$invalid || (userEmail.indexOf('@mail.weir') == -1)">
+                                <span ng-show="myForm.userEmail.$error.required">Email is required.</span>
+                                <span ng-show="(myForm.userEmail.$error.email)">Invalid email address.</span>
+                                <span ng-show="(myForm.userEmail.$error.pattern)">Email address should end with @mail.weir.</span>
+                                <span ng-show="userEmail.indexOf('@mail.weir') == -1">Email address should end with @mail.weir.</span>
+                            </span>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100" ng-init="getpartstatus()">
+                            <label>Status</label>
+                            <md-select name="amrPartStatus" ng-model="amrPartStatus.value">
+                                <md-option value="{{select.value}}" selected>{{select.label}}</md-option>
+                                <md-option ng-repeat="x in partstatuslist" value="{{x.oid}}">{{x.name}}</md-option>
+                            </md-select>
+                            <span style="color:red; text-align:right; display:block; width: 400px;" ng-show="amrPartStatus.value==0">
+                                <span>Status is required.</span>
+                            </span>
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100">
+                            <label>Part No (omit Material Code)</label>
+                            <input name="amrPartNo" ng-model="amrPartNo" minlength="3" required="" />
+                            <span style="color:red; text-align:right; display:block; width: 400px;" ng-show="myForm.amrPartNo.$dirty && myForm.amrPartNo.$invalid">
+                                <span ng-show="myForm.amrPartNo.$error.required">Part No is required.</span>
+                            </span>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100">
+                            <label>Part Description</label>
+                            <input name="amrPartDescription" ng-keypress="SubmitAMRFormEnter($event,(myForm.$invalid || amrPartStatus.value==0))" ng-model="amrPartDescription">
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100">
+                            <label>Requested New Material Code</label>
+                            <input name="amrNewMaterialCode" ng-keypress="SubmitAMRFormEnter($event,(myForm.$invalid || amrPartStatus.value==0))" ng-model="amrNewMaterialCode">
+                        </md-input-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100">
+                            <label>Existing Material</label>
+                            <input name="amrExistingMaterial" ng-keypress="SubmitAMRFormEnter($event,(myForm.$invalid || amrPartStatus.value==0))" ng-model="amrExistingMaterial">
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <!--<md-input-container flex="100">
+                            <label>Request Number</label>
+                            <input name="amrRequestNumber" ng-keypress="SubmitAMRFormEnter($event,(myForm.$invalid || amrPartStatus.value==0))" ng-model="amrRequestNumber">
+                        </md-input-container>-->
+                        <md-input-container flex="100" ng-init="getpriority()">
+                            <label>Priority</label>
+                            <md-select name="amrPriority" ng-model="amrPriority.value">
+                                <md-option value="{{select.value}}" selected>{{select.label}}</md-option>
+                                <md-option ng-repeat="x in prioritylist" value="{{x.oid}}">{{x.name}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100" class="padding-top-0 padding-bottom-0" layout="row">
+                            <label>Due Date</label>
+                            <md-datepicker flex md-hide-icons="calendar" md-open-on-focus name="amrDueDate" md-min-date="minDate" ng-model="amrDueDate" md-placeholder="Enter date"></md-datepicker>
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100">
+                            <label>Drawing Number</label>
+                            <input name="amrDrawingNumber" ng-keypress="SubmitAMRFormEnter($event,(myForm.$invalid || amrPartStatus.value==0))" ng-model="amrDrawingNumber">
+                        </md-input-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100">
+                            <label>Drawing Revision No</label>
+                            <input name="amrDrawingRevNo" ng-keypress="SubmitAMRFormEnter($event,(myForm.$invalid || amrPartStatus.value==0))" ng-model="amrDrawingRevNo">
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100" ng-init="getsite()">
+                            <label>Site</label>
+                            <md-select name="amrSite" ng-model="amrSite.value">
+                                <md-option value="{{select.value}}" selected>{{select.label}}</md-option>
+                                <md-option ng-repeat="x in sitelist" value="{{x.oid}}">{{x.name}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100" ng-init="getdco()">
+                            <label>DCO</label>
+                            <md-select name="amrDCO" ng-model="amrDCO.value">
+                                <md-option value="{{select.value}}" selected>{{select.label}}</md-option>
+                                <md-option ng-repeat="x in dcolist" value="{{x.oid}}">{{x.name}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <!--<md-input-container flex="100" ng-init="getpriority()">
+                            <label>Priority</label>
+                            <md-select name="amrPriority" ng-model="amrPriority.value">
+                                <md-option value="{{select.value}}" selected>{{select.label}}</md-option>
+                                <md-option ng-repeat="x in prioritylist" value="{{x.oid}}">{{x.name}}</md-option>
+                            </md-select>
+                        </md-input-container>-->
+                        <md-input-container flex="60">
+                            <label>Casting Requested</label>
+                        </md-input-container>
+                        <md-input-container flex="100">
+                            <md-radio-group ng-model="amrCastingRequest" layout="row" ng-init="amrCastingRequest=0">
+                                <md-radio-button value="1">Yes</md-radio-button>
+                                <md-radio-button value="0"> No</md-radio-button>
+                            </md-radio-group>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <!--<md-input-container flex="60">
+                            <label>Casting Requested</label>
+                        </md-input-container>
+                        <md-input-container flex="100">
+                            <md-radio-group ng-model="amrCastingRequest" layout="row" ng-init="amrCastingRequest=0">
+                                <md-radio-button value="1">Yes</md-radio-button>
+                                <md-radio-button value="0"> No</md-radio-button>
+                            </md-radio-group>
+                        </md-input-container>-->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="row search_button">
+                    <div class="col-sm-12">
+                        <div class="col-sm-6">
+                            <md-button md-no-ink type="button" ng-click="resetAMRRequestForm()" class="md-raised">CLEAR</md-button>
+                        </div>
+                        <div class="col-sm-6">
+                            <md-button ng-disabled="(myForm.$invalid || amrPartStatus.value==0)" md-no-ink ng-click="SubmitAMRRequestForm()" class="md-raised md-primary" ng-class='{"disableButton": (myForm.$invalid || amrPartStatus.value==0)}'>SUBMIT</md-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-sm-12" style="text-align:center"><span ng-show="errordiv" style="color:{{color}}">{{errormsg}}</span></div>
+            </div>
+            </br>
+            <div> <h4 style='font-weight:bold;'>Note: Placeholder for AMR Request description.</h4></div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100">
+                        </md-input-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100">
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100">
+                        </md-input-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100">
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div ng-show="(amrData == 'Request For Basic Data')">
+        <form name="dataIssueForm" novalidate>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100">
+                            <label>Requestor's Email ID</label>
+                            <input type="Email" pattern=".+@mail.weir" name="userEmail" ng-model="userEmail" required="" placeholder="Type Email here" />
+                            <span style="color:red; text-align:right; display:block; width: 400px;" ng-show="dataIssueForm.userEmail.$dirty || dataIssueForm.userEmail.$invalid ">
+                                <span ng-show="dataIssueForm.userEmail.$error.required">Email is required.</span>
+                                <span ng-show="(dataIssueForm.userEmail.$error.email)">Invalid email address.</span>
+                                <span ng-show="(dataIssueForm.userEmail.$error.pattern)">Email address should end with @mail.weir.</span>
+                                <span ng-show="userEmail.indexOf('@mail.weir') == -1">Email address should end with @mail.weir.</span>
+                            </span>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100" ng-init="getProduct()">
+                            <label>Product</label>
+                            <md-select name="amrProduct" ng-model="amrProduct">
+                                <md-option value="{{select.value}}" selected>{{select.label}}</md-option>
+                                <md-option ng-repeat="x in amrProductList" ng-value="x">{{x.name}}</md-option>
+                            </md-select>
+                            <span style="color:red; text-align:right; display:block; width: 400px;" ng-show="amrProduct==0">
+                                <span>Product is required.</span>
+                            </span>
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100">
+                            <label>Part Number</label>
+                            <input name="amrPartNo" ng-model="amrPartNo" minlength="3" required="" />
+                            <span style="color:red; text-align:right; display:block; width: 400px;" ng-show="dataIssueForm.amrPartNo.$dirty && dataIssueForm.amrPartNo.$invalid">
+                                <span ng-show="dataIssueForm.amrPartNo.$error.required">Part No is required.</span>
+                            </span>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100">
+                            <label>Part Description</label>
+                            <input name="amrPartDescription" ng-keypress="SubmitAMRFormEnter($event,(dataIssueForm.$invalid || amrProduct==0))" ng-model="amrPartDescription">
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100">
+                            <label for="myFile">Upload Reference file </label>&nbsp;
+                            <input type="file" file-model="myFile" id="myFile" />
+                        </md-input-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div layout="row">
+                        <md-input-container flex="100">
+                            <label for="remarks">Remarks (press Enter for next line)</label>&nbsp;
+                            <textarea name="remarks" id="remarks" ng-model="remarks" style="max-height:70px!important"></textarea>
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <md-input-container flex="100">
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="row">
+                <div class="row search_button">
+                    <div class="col-sm-12">
+                        <div class="col-sm-6">
+                            <md-button md-no-ink type="button" ng-click="resetAMRBasicDataForm()" class="md-raised">CLEAR</md-button>
+                        </div>
+                        <div class="col-sm-6">
+                            <md-button ng-disabled="(dataIssueForm.$invalid || amrProduct==0)" md-no-ink ng-click="SubmitAMRRequestForm()" class="md-raised md-primary" ng-class='{"disableButton": (dataIssueForm.$invalid || amrProduct==0)}'>SUBMIT</md-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-sm-12" style="text-align:center"><span ng-show="errordiv" style="color:{{color}}">{{errormsg}}</span></div>
+            </div>
+            <br />
+            <div> <h4 style='font-weight:bold;'>Note: Placeholder for Request For Basic Data description.</h4></div>
+            <br /><br /><br />
+        </form>
+    </div>
+
+    <div ng-show="(amrData == 'Data Issue')">
+        <form name="DataIssue" novalidate>
+            <div class="row">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div layout="row">
+                            <md-input-container flex="100">
+                                <label>Requestor's Email ID</label>
+                                <input type="Email" pattern=".+@mail.weir" name="userEmail" ng-model="userEmail" required="" placeholder="Type Email here" />
+                                <span style="color:red; text-align:right; display:block; width: 400px;" ng-show="DataIssue.userEmail.$dirty || DataIssue.userEmail.$invalid ">
+                                    <span ng-show="DataIssue.userEmail.$error.required">Email is required.</span>
+                                    <span ng-show="(DataIssue.userEmail.$error.email)">Invalid email address.</span>
+                                    <span ng-show="(DataIssue.userEmail.$error.pattern)">Email address should end with @mail.weir.</span>
+                                    <span ng-show="userEmail.indexOf('@mail.weir') == -1">Email address should end with @mail.weir.</span>
+                                </span>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div layout="row">
+                            <md-input-container flex="100" ng-init="getProduct()">
+                                <label>Product</label>
+                                <md-select name="amrProduct" ng-model="amrProduct">
+                                    <md-option value="{{select.value}}" selected>{{select.label}}</md-option>
+                                    <md-option ng-repeat="x in amrProductList" ng-value="x">{{x.name}}</md-option>
+                                </md-select>
+                                <span style="color:red; text-align:right; display:block; width: 400px;" ng-show="amrProduct==0">
+                                    <span>Product is required.</span>
+                                </span>
+                            </md-input-container>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div layout="row">
+                            <md-input-container flex="100">
+                                <label>Part Number</label>
+                                <input name="amrPartNo" ng-model="amrPartNo" minlength="3" required="" />
+                                <span style="color:red; text-align:right; display:block; width: 400px;" ng-show="dataIssueForm.amrPartNo.$dirty && dataIssueForm.amrPartNo.$invalid">
+                                    <span ng-show="dataIssueForm.amrPartNo.$error.required">Part No is required.</span>
+                                </span>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div layout="row">
+                            <md-input-container flex="100">
+                                <label>Part Description</label>
+                                <input name="amrPartDescription" ng-keypress="SubmitAMRFormEnter($event,(dataIssueForm.$invalid || amrProduct==0))" ng-model="amrPartDescription">
+                            </md-input-container>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div layout="row">
+                            <md-input-container flex="100">
+                                <label for="myFileForDataIssue">Upload Reference file </label>&nbsp;
+                                <input type="file" file-model="myFileForDataIssue" id="myFileForDataIssue" />
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div layout="row">
+                            <md-input-container flex="100">
+                                <label for="IssueDescription">Issue Description</label>&nbsp;
+                                <textarea name="IssueDescription" id="issueDescription" ng-model="issuedescription" style="max-height:70px!important"></textarea>
+                            </md-input-container>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <md-input-container flex="100">
+                        </md-input-container>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row search_button">
+                        <div class="col-sm-12">
+                            <div class="col-sm-6">
+                                <md-button md-no-ink type="button" ng-click="resetAMRDataIssueForm()" class="md-raised">CLEAR</md-button>
+                            </div>
+                            <div class="col-sm-6">
+                                <!--<md-button ng-disabled="(dataIssueForm.$invalid || amrProduct==0)" md-no-ink ng-click="SubmitAMRRequestForm()" class="md-raised md-primary" ng-class='{"disableButton": (dataIssueForm.$invalid || amrProduct==0)}'>SUBMIT</md-button>-->
+                                <md-button ng-disabled="(DataIssue.$invalid || amrProduct==0)" md-no-ink ng-click="SubmitAMRRequestForm()" class="md-raised md-primary" ng-class='{"disableButton": (DataIssue.$invalid || amrProduct==0)}'>SUBMIT</md-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12" style="text-align:center"><span ng-show="errordiv" style="color:{{color}}">{{errormsg}}</span></div>
+                </div>
+                <br />
+                <div> <h4 style='font-weight:bold;'>Note: Placeholder for Data Issue description.</h4></div>
+                <br /><br /><br />
+            </div>
+        </form>
+    </div>
+</div>

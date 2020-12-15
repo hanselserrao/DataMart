@@ -1,0 +1,1791 @@
+﻿@{
+    ViewBag.Title = "Part search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+        padding: 12px !important;
+        line-height: 1.42857143;
+        vertical-align: top;
+        border-top: 1px solid #ddd;
+    }
+
+    autocomplete {
+        position: relative;
+    }
+
+    .spinner {
+        float: right;
+        position: absolute;
+        margin-top: -6px;
+        margin-left: -45px;
+    }
+    form{
+        margin-top:-20%;
+    }
+    label {
+        color: #000 !important;
+    }
+
+    .autocomplete input {
+        outline: none !important;
+        border-bottom: 1px #6d6565 solid !important;
+    }
+
+    #scrollArea {
+        height: 280px;
+        overflow: auto;
+    }
+
+    #bottom {
+        display: block;
+        margin-top: 2000px;
+    }
+
+    .loading-pane {
+        position: absolute;
+        /*background: url("images/Cube.gif");*/
+    }
+
+        .loading-pane .spinner-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url("../images/Cube.gif") center center no-repeat;
+        }
+
+    a:hover {
+        opacity: 0.4;
+    }
+
+    a:hover
+</style>
+
+
+<div class="homeback">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-9"> <img class="logo" src="~/images/logo.png" /> </div>
+            <div class="col-md-3 pull-right">
+                <ul>
+                    <li style="color:white;list-style-type:none;float:left;padding-right: 10px;">
+                        <a href="@Url.Action("Logout","Home")" style="color:white;">
+                            Welcome
+                            @Convert.ToString(Session["username"])
+                        </a>
+                    </li>
+                    <li style="color:white;list-style-type:none;margin-top:20px">
+                        <a style="color:white;" href="@Url.Action("Logout","Home")">
+                            Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <!--------------------------- tab ---------------------->
+                <div class="search-left col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                    <ul>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="search">
+                                <a   rel="week_3" ng-click="clcik()">
+                                    <img src="~/images/icon4.png" />
+                                    <li style="padding-left:6px;">
+                                        Part1
+                                        Search
+                                        <hr />
+                                        <h5>Use this option to search using part2 number</h5>
+                                    </li>
+                                </a>
+
+                            </div>
+
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="search">
+                                <a   rel="week_4" id="docc" ng-click="clcik()">
+                                    <img src="~/images/icon1.png" />
+                                    <li style="padding-left:6px;">
+                                        Document
+                                        Search
+                                        <hr />
+                                        <h5>Use this option to search document details using document number</h5>
+                                    </li>
+                                </a>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="search">
+                                <a   rel="week_5" ng-click="clcik()">
+                                    <img src="~/images/icon2.png" />
+                                    <li style="padding-left:6px;">
+                                        LED
+                                        Search
+                                        <hr />
+                                        <h5>Use this option to search LED details using LED number</h5>
+                                    </li>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="search">
+                                <a   rel="week_6" ng-click="clcik()">
+                                    <img src="~/images/icon5.png" />
+                                    <li style="padding-left:6px;">
+                                        PCN
+                                        Search
+                                        <hr />
+                                        <h5>Use this option to search PCN details using PCN number</h5>
+                                    </li>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="search">
+                                <a   rel="week_7" ng-click="clcik()">
+                                    <div><img src="~/images/icon3.png" /></div>
+                                    <li style="padding-left:6px;">
+                                        ETO
+                                        Search
+                                        <hr />
+                                        <h5>Use this option to search ETO details using ETO number</h5>
+                                    </li>
+                                </a>
+                            </div>
+                        </div>
+                        @*<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+            <div class="search">
+                <a href="@Url.Action("Logout","Home")" ng-click="clcik()">
+                    <div>  <img src="~/images/logout1.png" /></div>
+                    <li style="padding-left:6px;">
+                        Welcome
+                        @Convert.ToString(Session["username"])
+                        <hr />
+                        <h5>Click here to logout</h5>
+                    </li>
+                </a>
+
+            </div>
+
+        </div>*@
+                    </ul>
+                </div>
+
+                <!--------------------------- tab end---------------------->
+                <!--------------------------- form ---------------------->
+                <div class="line col-lg-7 col-md-7 col-sm-7 col-xs-12">
+                    <div id="week_3" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 search_right tab1">
+                        <div loading-pane="isPaneShown">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h1>PART SEARCH</h1>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div layout="row">
+                                        <md-input-container flex="100">
+                                            <label>Part Number</label>
+                                            <input name="clientName" ng-keypress="SubmitformEnter($event)" ng-model="partNumber">
+                                        </md-input-container>
+                                        @*<md-input-container flex="100">
+                                                <label>Part Number</label>
+                                                <autocomplete ng-model="partNumber" attr-placeholder="Type to search part number..." click-activation="true" data="movies" on-type="doSomething" on-select="doSomethingElse"></autocomplete>
+                                                <img class="spinner" ng-show="spinner" src="~/images/loader.gif" />
+
+                                            </md-input-container>*@
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div layout="row">
+                                        <md-input-container flex="100">
+                                            <label>Document Number</label>
+                                            <input name="DocNumber" ng-keypress="SubmitformEnter($event)" ng-model="DocNumber">
+
+                                        </md-input-container>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div layout="row">
+                                        <md-input-container flex="100">
+                                            <label>Legacy Part Number</label>
+                                            <input name="clientName" ng-keypress="SubmitformEnter($event)" ng-model="LegPartNumer">
+                                        </md-input-container>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div layout="row">
+                                        <md-input-container flex="100">
+                                            <label>Legacy Document Number</label>
+                                            <input name="clientName" ng-keypress="SubmitformEnter($event)" ng-model="LegDocNumber">
+                                            <div ng-messages="projectForm.clientName.$error">
+                                                <div ng-message="required">This is required.</div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div layout="row">
+                                        <md-input-container flex="100" ng-init="getitemstatus()">
+                                            <label>Part Status</label>
+                                            <md-select name="partStatus" ng-model="partStatus.value">
+                                                <md-option value="{{current.value}}" selected>{{current.label}}</md-option>
+
+                                                <md-option ng-repeat="x in itemstatuslist" value="{{x.oid}}">{{x.name}}</md-option>
+                                            </md-select>
+
+                                            @*<div ng-messages="projectForm.clientName.$error">
+                                                    <div ng-message="required">This is required.</div>
+                                                </div>*@
+                                        </md-input-container>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div layout="row">
+                                        <md-input-container flex="100" ng-init="getitemtype()">
+                                            <label>Part Type</label>
+
+                                            <md-select name="PartType" ng-model="PartType.value" required>
+                                                <md-option value="{{current.value}}" selected>{{current.label}}</md-option>
+                                                <md-option ng-repeat="x in itemtypelist" value="{{x.oid}}">{{x.name}}</md-option>
+
+                                            </md-select>
+                                        </md-input-container>
+                                    </div>
+                                </div>
+                                <div class="row search_button">
+                                    <div class="col-sm-12">
+                                        <div class="col-sm-2"></div>
+                                        <div class="col-sm-4">
+                                            <md-button md-no-ink type="reset" ng-click="resetValue()" class="md-raised">CLEAR</md-button>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <md-button md-no-ink ng-click="Submitform()" class="md-raised md-primary">SEARCH</md-button>
+                                        </div>
+                                        <div class="col-sm-2"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="week_4" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 search_right tab1">
+                        <div loading-pane="isPaneShown">
+                            <form>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <h1>DOCUMENT SEARCH</h1>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>Document Number</label>
+                                                <input name="clientName" ng-keypress="DocsearchformEnter($event)" ng-model="documentNumber">
+                                            </md-input-container>
+                                            @*<md-input-container flex="100">
+                                                    <label>Document Number</label>
+                                                    <autocomplete ng-model="documentNumber" attr-placeholder="Type to search document number..." click-activation="true" data="docnumber" on-type="searchdoc1" on-select=""></autocomplete>
+                                                    <img class="spinner" ng-show="spinner" src="~/images/loader.gif" />
+                                                </md-input-container>*@
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>Document Description</label>
+                                                <input name="clientName" ng-keypress="DocsearchformEnter($event)" ng-model="documentDescription">
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>Legacy Part Number</label>
+                                                <input name="clientName" ng-keypress="DocsearchformEnter($event)" ng-model="legacyPartNumber">
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>Legacy Document Number</label>
+                                                <input name="clientName" ng-keypress="DocsearchformEnter($event)" ng-model="LegDocumentNumber">
+                                                <div ng-messages="projectForm.clientName.$error">
+                                                    <div ng-message="required">This is required.</div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>Document Status</label>
+                                                <md-select name="docStatus" ng-model="docStatus.value">
+                                                    <md-option value="{{current.value}}" selected>{{current.label}}</md-option>
+                                                    <md-option ng-repeat="x in itemstatuslist" value="{{x.oid}}">{{x.name}}</md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>Document Type</label>
+                                                <md-select name="docType" ng-model="docType.value" required ng-init="getdoctype()">
+                                                    <md-option value="{{current.value}}" selected>{{current.label}}</md-option>
+                                                    <md-option ng-repeat="xs in itemDoclist" value="{{xs.oid}}">{{xs.name}}</md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <div class="row search_button">
+                                        <div class="col-sm-12">
+                                            <div class="col-sm-2"></div>
+                                            <div class="col-sm-4">
+                                                <md-button md-no-ink type="reset" ng-click="resetDocValue()" class="md-raised">CLEAR</md-button>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <md-button md-no-ink ng-click="Docsearchform()" class="md-raised md-primary dcobtn">SEARCH</md-button>
+                                            </div>
+                                            <div class="col-sm-2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="week_5" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 search_right tab1">
+                        <div loading-pane="isPaneShown">
+                            <form style="max-height:600px;">
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <h1>LED SEARCH</h1>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="50">
+                                                <label> Lifting Equipment Part Number</label>
+                                                <input name="DocNumber" ng-keypress="SearchLEDformEnter($event)" ng-model="liftpartNumber">
+                                            </md-input-container>
+                                            <md-input-container flex="50">
+                                                <label> Lifting Equipment Document Number</label>
+                                                <input name="DocNumber" ng-keypress="SearchLEDformEnter($event)" ng-model="liftDocNumber">
+                                            </md-input-container>
+                                            @*<md-input-container flex="100">
+            <label>Lifting Equipment Part Number</label>
+            <autocomplete ng-model="liftpartNumber" attr-placeholder="Type to search LED number..." click-activation="true" data="movies" on-type="doSomething" on-select="doSomethingElse"></autocomplete>
+            <img class="spinner" ng-show="spinner" src="~/images/loader.gif" />
+        </md-input-container>*@
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="50" ng-init="getLEDtype()">
+                                                <label>Lifting Equipment  Type</label>
+                                                @*<input name="liftPartType" ng-model="liftPartType">*@
+                                                <md-select name="PartType" ng-model="liftPartType.value" required>
+                                                    <md-option value="{{current.value}}" selected>{{current.label}}</md-option>
+                                                    <md-option ng-repeat="a in itemLEDlist" value="{{a.id}}">{{a.name}}</md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                            <md-input-container flex="50" ng-init="getLEDStatus()">
+                                                <label>Lefting Equipment Part Status</label>
+                                                <md-select name="liftpartStatus" ng-model="liftpartStatus.value">
+                                                    <md-option value="{{current.value}}" selected>{{current.label}}</md-option>
+                                                    <md-option ng-repeat="a in itemgetLEDStatuslist" value="{{a.id}}">{{a.name}}</md-option>
+                                                    @*<md-option ng-options="obj.id as name for obj in itemgetLEDStatuslist">{{current.label}}</md-option>*@
+
+                                                </md-select>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="50">
+                                                <label>Component where used</label>
+                                                <input name="clientName" ng-keypress="SearchLEDformEnter($event)" ng-model="Compwhereused">
+                                            </md-input-container>
+                                            <md-input-container flex="50">
+                                                <label>Product where used</label>
+                                                <input name="clientName" ng-keypress="SearchLEDformEnter($event)" ng-model="Productwhere">
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="50">
+                                                <label>Has Certification</label>
+                                                <md-select name="hasCertification" ng-model="hasCertification.value">
+                                                    <md-option value="0" ng-selected="true"></md-option>
+                                                    <md-option value="No" selected>No</md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                            <md-input-container flex="50">
+                                                <label>Has Instruction Document</label>
+                                                <md-select name="Hasdocument" ng-model="hasInsDoc.value">
+                                                    <md-option value="0" ng-selected="true"></md-option>
+                                                    <md-option value="No" selected>No</md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>Tare (kg)</label>
+                                                <md-select name="tare" ng-model="tare.value">
+                                                    <md-option value="{{current.value}}" selected>{{current.label}}</md-option>
+                                                    <md-option value="1">  < </md-option>
+                                                    <md-option value="2">  > </md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                            <md-input-container flex="50">
+                                                <label>0.0</label>
+                                                <input ng-model="tarevalue" />
+                                            </md-input-container>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="50">
+                                                <label>WLL (kg)</label>
+                                                <md-select name="WLLValue" ng-model="wll.value">
+                                                    <md-option value="{{current.value}}" selected>{{current.label}}</md-option>
+                                                    <md-option value="1">  < </md-option>
+                                                    <md-option value="2">  > </md-option>
+                                                </md-select>
+
+                                            </md-input-container>
+                                            <md-input-container flex="50">
+                                                <label>0.0</label>
+                                                <input ng-model="WLLValue" ng-keypress="SearchLEDformEnter($event)" />
+                                            </md-input-container>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="50">
+                                                <label>Lifting Equipment Description</label>
+                                                <input name="clientName" ng-keypress="SearchLEDformEnter($event)" ng-model="liftdesc">
+                                            </md-input-container>
+                                            <md-input-container flex="50">
+                                                <label>Search By</label>
+                                                <md-select name="SearchBy" ng-model="SearchBy.value">
+                                                    <md-option value="{{current.value}}" selected>{{current.label}}</md-option>
+                                                    <md-option value="1">Lifting Equipment</md-option>
+                                                    <md-option value="2">Component</md-option>
+                                                    <md-option value="3">Product<md-option>
+                                                </md-select>
+                                            </md-input-container>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row search_button">
+                                        <div class="col-sm-12">
+                                            <div class="col-sm-2"></div>
+                                            <div class="col-sm-4">
+                                                <md-button md-no-ink type="reset" ng-click="resetValue()" class="md-raised">CLEAR</md-button>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <md-button md-no-ink ng-click="SearchLEDform()" class="md-raised md-primary">SEARCH</md-button>
+                                            </div>
+                                            <div class="col-sm-2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="week_6" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 search_right tab1">
+                        <div loading-pane="isPaneShown">
+                            <form>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <h1>PCN SEARCH</h1>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>PCN Number</label>
+                                                <input name="clientName" ng-keypress="PCNsearchformEnter($event)" ng-model="pcnNumber">
+                                            </md-input-container>
+                                            @*<md-input-container flex="100">
+                                                    <label>PCN Number</label>
+                                                    <autocomplete ng-model="pcnNumber" attr-placeholder="Type to search pcn number..." click-activation="true" data="pcnnumber" on-type="searchpcn" on-select=""></autocomplete>
+                                                    <img class="spinner" ng-show="spinner" src="~/images/loader.gif" />
+                                                </md-input-container>*@
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>PCN Description</label>
+                                                <input name="clientName" ng-keypress="PCNsearchformEnter($event)" ng-model="pcnDescription">
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>Problem Part</label>
+                                                <input name="clientName" ng-keypress="PCNsearchformEnter($event)" ng-model="problemPart">
+
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>Solution Part</label>
+                                                <input name="clientName" ng-keypress="PCNsearchformEnter($event)" ng-model="solutionPart">
+                                            </md-input-container>lo
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>Impected Part</label>
+                                                <input name="clientName" ng-keypress="PCNsearchformEnter($event)" ng-model="impectedPart">
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <div class="row search_button">
+                                        <div class="col-sm-12">
+                                            <div class="col-sm-2"></div>
+                                            <div class="col-sm-4">
+                                                <md-button md-no-ink type="reset" ng-click="resetpcnValue()" class="md-raised">CLEAR</md-button>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <md-button md-no-ink ng-click="PCNsearchform()" class="md-raised md-primary">SEARCH</md-button>
+                                            </div>
+                                            <div class="col-sm-2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="week_7" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 search_right tab1" style="margin-top: -100px;">
+                        <div loading-pane="isPaneShown">
+                            <form>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <h1>ETO SEARCH</h1>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>ETO Number</label>
+                                                <input name="clientName" ng-keypress="EtosearchformEnter($event)" ng-model="etoNumber">
+                                            </md-input-container>
+                                            @*<md-input-container flex="100">
+                                                    <label>ETO Number</label>
+                                                    <autocomplete ng-model="etoNumber" attr-placeholder="Type to search ETO number..." click-activation="true" data="etonumber" on-type="searcheto" on-select=""></autocomplete>
+                                                    <img class="spinner" ng-show="spinner" src="~/images/loader.gif" />
+                                                </md-input-container>*@
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>GA Growing</label>
+                                                <input name="clientName" ng-model="gaGrowing" ng-keypress="EtosearchformEnter($event)">
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>Project Name</label>
+                                                <input name="clientName" ng-model="projectName" ng-keypress="EtosearchformEnter($event)">
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>Order Number</label>
+                                                <input name="clientName" ng-model="orderNumber" ng-keypress="EtosearchformEnter($event)">
+                                                <div ng-messages="projectForm.clientName.$error">
+                                                    <div ng-message="required">This is required.</div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>Customer Name</label>
+                                                <input name="clientName" ng-model="customerName" ng-keypress="EtosearchformEnter($event)">
+                                                <div ng-messages="projectForm.clientName.$error">
+                                                    <div ng-message="required">This is required.</div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>Document </label>
+                                                <input name="clientName" ng-keypress="EtosearchformEnter($event)" ng-model="document">
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>Routing </label>
+                                                <input name="clientName" ng-keypress="EtosearchformEnter($event)" ng-model="routing">
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>Order Parts </label>
+                                                <input name="clientName" ng-keypress="EtosearchformEnter($event)" ng-model="orderParts">
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div layout="row">
+                                            <md-input-container flex="100">
+                                                <label>References </label>
+                                                <input name="clientName" ng-keypress="EtosearchformEnter($event)" ng-model="reference">
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <div class="row search_button">
+                                        <div class="col-sm-12">
+                                            <div class="col-sm-2"></div>
+                                            <div class="col-sm-4">
+                                                <md-button md-no-ink type="reset" ng-click="resetETOValue()" class="md-raised">CLEAR</md-button>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <md-button md-no-ink ng-click="Etosearchform()" class="md-raised md-primary">SEARCH</md-button>
+                                            </div>
+                                            <div class="col-sm-2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+                <!--------------------------- form end ---------------------->
+            </div>
+        </div>
+    </div>
+
+</div>
+@*partlist*@
+<div class="container table-responsive scrollArea" ng-show="list1" ng-if="itemlist" style="height:900px">
+    <h2>Search Result</h2>
+    <div layout="row" ng-init="search()">
+        @*<md-input-container flex="100" >
+                <label>Search keyword...</label>
+                <input  ng-model="criteria.searchtext" ng-model-options="{debounce {'default' 1000, 'blur'0}}">
+            </md-input-container>*@
+    </div>
+
+
+    <table class="table  table-hover table-condensed " style="color: #000;">
+        <thead>
+            <tr>
+                <div class="row" style="background-color:#f1e1d1; padding:7px;">
+                    <div class="col-lg-6 " ng-if="criteria">
+                        Showing: {{(criteria.page -1) * criteria.pagesize + 1}} -
+                        {{ ((criteria.page -1) * criteria.pagesize + paging.showing)}}
+                        of {{paging.total}} Records
+                    </div>
+
+                    <div class="col-lg-6 ">
+                        <div class="pull-right">
+                            Page: <input type='number'
+                                         ng-model='criteria.page'
+                                         min="1"
+                                         max="{{paging.totalpages}}"
+                                         style='width:70px;' />
+                            of {{paging.totalpages}}
+                            with page size <select ng-model="criteria.pagesize"
+                                                   ng-options="obj as obj for obj in paging.pagingOptions" />
+                        </div>
+                    </div>
+                </div>
+
+            </tr>
+            <tr>
+
+                <th ng-click="criteria.sort = 'itemid';">
+                    Part Number
+                    <span class="fa fa-sort" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+
+                <th ng-click="sort('itemtype')">
+                    PartType
+                    <span class="fa fa-sort" ng-show="sortKey=='itemtype'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('revision')">
+                    Part Revision
+                    <span class="fa fa-sort" ng-show="sortKey=='revision'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('dcoid')">
+                    Document Number
+                    <span class="fa fa-sort" ng-show="sortKey=='drawingid'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('datereleased')">
+                    Date Release
+                    <span class="fa fa-sort" ng-show="sortKey=='datereleased'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('itemstatus')">
+                    Part Status
+                    <span class="fa fa-sort" ng-show="sortKey=='itemstatus'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="table">
+            <tr class="animate" ng-repeat-start="user in customers">
+                @*<tr class="animate" dir-paginate-start="user in itemlist|orderBy:sortBy:reverse|filter:search|productsPerPage:10">*@
+
+                <td>
+                    <i ng-if="user.expanded" ng-click="user.expanded = false" class="fa fa-minus"><img src="~/images/up.png" /></i>
+                    <i ng-if="!user.expanded" ng-click="user.expanded = true" class="fa fa-plus"><img src="~/images/down.png" /></i>
+                    &nbsp;&nbsp; <a   class="two" data-target="#myModal" data-toggle="modal" ng-click="ViewDeatails(user.iid)"><md-tooltip md-direction="left">Refresh</md-tooltip>{{user.itemid}} <md-tooltip md-direction="bottom">View Details</md-tooltip></a>
+                </td>
+                <td>{{user.itemtype}}</td>
+                <td>{{user.revision}}</td>
+                <td ng-click="sendtodoc(user.drawingid)"><a  >{{user.drawingid}}</a></td>
+
+                <td>{{user.datereleased}}</td>
+                <td>{{user.name}}</td>
+            <tr ng-if="user.expanded" ng-repeat-end="">
+                <td colspan="8" style="background: #fff;">
+                    <table>
+                        <thead>
+                            <tr>  <th>Part Description:</th><td>{{user.description}}</td> </tr>
+                            <tr><th>Legacy Part Number:</th><td>{{user.legacy_part_number}}</td></tr>
+                            <tr> <th>Legacy Document Number:</th><td>{{user.legacy_document_number}}</td></tr>
+                            <tr><th>Site:</th> <td>{{user.site}}</td></tr>
+                            <tr> <th>DCO:</th><td>{{user.dcoid}}</td> </tr>
+                            <tr> <th>Length:</th><td>{{user.length}}</td> </tr>
+                            <tr> <th>Height:</th> <td>{{user.height}}</td></tr>
+                            <tr>  <th>Width:</th><td>{{user.width}}</td></tr>
+                            <tr>  <th>weight:</th><td>{{user.weight}}</td></tr>
+                            <tr> <th>References:</th> <td>{{user.reference}}</td></tr>
+                        </thead>
+                    </table>
+                </td>
+            </tr>
+
+            </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="pull-right">
+            <ul class="pagination">
+                <li ng-class="{'active': item === criteria.page}" ng-repeat='item in paging.pagearray'>
+
+                    <a ng-if="item == 'Prev'" ng-click="Prev()">Prev</a>
+
+                    <a ng-if="(!(item == 'Prev' || item == 'Next' ||  item == '..' || item == '...'))"
+                       ng-click="criteria.page = item;">{{item}}</a>
+
+                    <!-- No click event -->
+                    <a ng-if="(item == '..' || item == '...')">{{item}}</a>
+
+                    <a ng-if="item == 'Next'" ng-click="Next()">Next</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+@*partlist*@
+@*doclist*@
+<div class="container table-responsive scrollArea" ng-show="list2" ng-if="doclist" style="height:900px">
+    <h2 ng-init="search()">Search Result</h2>
+    @*<div layout="row">
+            <md-input-container flex="100" ng-init="search()" >
+                <label>Search keyword...</label>
+                <input  ng-model="criteria.searchtext" ng-model-options="{debounce {'default' 1000, 'blur'0}}">
+            </md-input-container>
+        </div>*@
+
+
+    <table class="table  table-hover table-condensed " style="color: #000;">
+        <thead>
+            <tr>
+                <div class="row" style="background-color:#f1e1d1; padding:7px;">
+                    <div class="col-lg-6 ">
+                        Showing: {{(criteria.page -1) * criteria.pagesize + 1}} -
+                        {{ ((criteria.page -1) * criteria.pagesize + paging.showing)}}
+                        of {{paging.total}} Records
+                    </div>
+
+                    <div class="col-lg-6 ">
+                        <div class="pull-right">
+                            Page: <input type='number'
+                                         ng-model='criteria.page'
+                                         min="1"
+                                         max="{{paging.totalpages}}"
+                                         style='width:70px;' />
+                            of {{paging.totalpages}}
+                            with page size <select ng-model="criteria.pagesize"
+                                                   ng-options="obj as obj for obj in paging.pagingOptions" />SSS
+                        </div>
+                    </div>
+                </div>
+
+            </tr>
+            <tr>
+
+                <th ng-click="criteria.sort = 'itemid';">
+                    Document Number
+                    <span class="fa fa-sort" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('itemname')">
+                    Document Description
+                    <span class="fa fa-sort" ng-show="sortKey=='itemname'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('itemtype')">
+                    Document Type
+                    <span class="fa fa-sort" ng-show="sortKey=='itemtype'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('revision')">
+                    Document Revision
+                    <span class="fa fa-sort" ng-show="sortKey=='revision'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('dcoid')">
+                    Part Number
+                    <span class="fa fa-sort" ng-show="sortKey=='drawingid'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('datereleased')">
+                    Date Release
+                    <span class="fa fa-sort" ng-show="sortKey=='datereleased'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('itemstatus')">
+                    Document Status
+                    <span class="fa fa-sort" ng-show="sortKey=='itemstatus'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="table">
+            <tr class="animate" ng-repeat-start="user in documentlist">
+                @*<tr class="animate" dir-paginate-start="user in itemlist|orderBy:sortBy:reverse|filter:search|productsPerPage:10">*@
+
+                <td>
+                    <i ng-if="user.expanded" ng-click="user.expanded = false" class="fa fa-minus"><img src="~/images/up.png" /></i>
+                    <i ng-if="!user.expanded" ng-click="user.expanded = true" class="fa fa-plus"><img src="~/images/down.png" /></i>
+                    &nbsp;&nbsp; <a   class="two" data-toggle="modal" data-target="#myModal" ng-click="ViewDeatails(user.iid)"><md-tooltip md-direction="left">Refresh</md-tooltip>{{user.drawingid}} <md-tooltip md-direction="bottom">View Details</md-tooltip></a>
+                </td>
+                <td><a style="cursor:not-allowed"  > {{user.description}}</a></td>
+                <td>{{user.doctype}}</td>
+                <td>{{user.docrevision}}</td>
+                <td>{{user.itemid}}</td>
+                <td>{{user.datereleased}}</td>
+                <td>{{user.status}}</td>
+            <tr ng-if="user.expanded" ng-repeat-end="">
+                <td colspan="8" style="background: #fff;">
+                    <table>
+                        <thead>
+                            <tr> <th>Part Name:</th><td>{{user.itemname}}</td> </tr>
+                            <tr> <th>Part Revision:</th> <td>{{user.revision}}</td></tr>
+                            <tr> <th>Legacy Part Number:</th><td>{{user.legacy_part_number}}</td></tr>
+                            <tr> <th>Legacy Document Number:</th><td>{{user.legacy_document_number}}</td></tr>
+
+                            <tr> <th>Status:</th><td>{{user.status}}</td> </tr>
+                            <tr> <th>Document Name:</th><td>{{user.docname}}</td> </tr>
+                            <tr> <th>Site:</th> <td>{{user.site}}</td></tr>
+
+                            <tr> <th>Document Type:</th><td>{{user.doctype}}</td></tr>
+
+                            <tr> <th>Part Type:</th><td>{{user.itemtype}}</td> </tr>
+                            <tr> <th>Part Description:</th><td>{{user.description}}</td> </tr>
+                            <tr> <th>DataSet Type:</th> <td>{{user.dataset}}</td></tr>
+                            <tr>  <th>File Name:</th><td  ng-if="user.dataset==='NonDetailedPDF'"><a href="{{user.fileurl}}" target="_blank"> {{user.datasetname}}</a></td></tr>
+                        </thead>
+                    </table>
+                </td>
+            </tr>
+
+            </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="pull-right">
+            <ul class="pagination">
+                <li ng-class="{'active': item === criteria.page}" ng-repeat='item in paging.pagearray'>
+
+                    <a ng-if="item == 'Prev'" ng-click="Prev()">Prev</a>
+
+                    <a ng-if="(!(item == 'Prev' || item == 'Next' ||  item == '..' || item == '...'))"
+                       ng-click="criteria.page = item;">{{item}}</a>
+
+                    <!-- No click event -->
+                    <a ng-if="(item == '..' || item == '...')">{{item}}</a>
+
+                    <a ng-if="item == 'Next'" ng-click="Next()">Next</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+@*doclist*@
+
+@*pcnlist*@
+<div class="container table-responsive scrollArea" ng-show="list3" ng-if="pcnlist" style="height:900px">
+    <h2 ng-init="search()">Search Result</h2>
+    @*<div layout="row">
+            <md-input-container flex="100" ng-init="search()" >
+                <label>Search keyword...</label>
+                <input  ng-model="criteria.searchtext" ng-model-options="{debounce {'default' 1000, 'blur'0}}">
+            </md-input-container>
+        </div>*@
+
+
+    <table class="table  table-hover table-condensed " style="color: #000;">
+        <thead>
+            <tr>
+                <div class="row" style="background-color:#f1e1d1; padding:7px;">
+                    <div class="col-lg-6 ">
+                        Showing: {{(criteria.page -1) * criteria.pagesize + 1}} -
+                        {{ ((criteria.page -1) * criteria.pagesize + paging.showing)}}
+                        of {{paging.total}} Records
+                    </div>
+
+                    <div class="col-lg-6 ">
+                        <div class="pull-right">
+                            Page: <input type='number'
+                                         ng-model='criteria.page'
+                                         min="1"
+                                         max="{{paging.totalpages}}"
+                                         style='width:70px;' />
+                            of {{paging.totalpages}}
+                            with page size <select ng-model="criteria.pagesize"
+                                                   ng-options="obj as obj for obj in paging.pagingOptions" />
+                        </div>
+                    </div>
+                </div>
+
+            </tr>
+            <tr>
+                <th ng-click="criteria.sort = 'pcnid';">
+                    PCN Number
+                    <span class="fa fa-sort" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('revision')">
+                    PCN Revision
+                    <span class="fa fa-sort" ng-show="sortKey=='revision'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('itemtype')">
+                    Synopsis
+                    <span class="fa fa-sort" ng-show="sortKey=='Synopsis'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('itemname')">
+                    PCN Description
+                    <span class="fa fa-sort" ng-show="sortKey=='description'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="table">
+            <tr class="animate" ng-repeat-start="user in pcdatalist">
+                @*<tr class="animate" dir-paginate-start="user in itemlist|orderBy:sortBy:reverse|filter:search|productsPerPage:10">*@
+
+                <td ng-click="getpcndetail(user.pid,$index)">
+                    <i ng-if="user.expanded" ng-click="user.expanded = false" class="fa fa-minus"><img src="~/images/up.png" /></i>
+                    <i ng-if="!user.expanded" ng-click="user.expanded = true" class="fa fa-plus"><img src="~/images/down.png" /></i>
+                    &nbsp;&nbsp; <a   class="two"><md-tooltip md-direction="left">Refresh</md-tooltip>{{user.pcnid}} <md-tooltip md-direction="bottom">View Details</md-tooltip></a>
+                </td>
+                <td><a style="cursor:not-allowed"  > {{user.revision}}</a></td>
+                <td>{{user.synopsis}}</td>
+                <td>{{user.description}}</td>
+
+            <tr ng-if="user.expanded" ng-repeat-end="">
+                <td colspan="9" style="background: #fff;">
+                    <table colspan="9">
+                        <thead>
+                            <tr>&nbsp; &nbsp;&nbsp; &nbsp;<th colspan="3">Problem Part</th>&nbsp; &nbsp;&nbsp; &nbsp;<th colspan="3">Solution Part</th>&nbsp; &nbsp;&nbsp; &nbsp;<th colspan="3">Impacted Part</th> </tr>
+                            <tr>
+                                &nbsp; &nbsp;&nbsp; &nbsp;
+                                <th  >
+                                <table>
+                                    <tr ng-repeat="xx in user.problem">
+                                        <td ng-click="sendtodoc(xx.problemdata)">{{xx.problemdata}} </td>
+                                    </tr>
+                                </table>
+                                <th >
+                                    <table>
+                                        <tr ng-repeat="xxx in user.solution">
+                                            <td ng-click="sendtodoc(xxx.problemdata)">{{xxx.problemdata}} </td>
+                                        </tr> 
+                                    </table>
+                                </th>&nbsp; &nbsp;&nbsp; &nbsp;
+                                <th >
+                                    <table>
+                                        <tr ng-repeat="xxxx in user.impacted">
+                                            <td ng-click="sendtodoc(xxxx.problemdata)">{{xxxx.problemdata}} </td>
+                                        </tr>
+                                    </table>
+                                </th>
+                            </tr>
+
+                        </thead>
+                    </table>
+                </td>
+            </tr>
+
+            </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="pull-right">
+            <ul class="pagination">
+                <li ng-class="{'active': item === criteria.page}" ng-repeat='item in paging.pagearray'>
+
+                    <a ng-if="item == 'Prev'" ng-click="Prev()">Prev</a>
+
+                    <a ng-if="(!(item == 'Prev' || item == 'Next' ||  item == '..' || item == '...'))"
+                       ng-click="criteria.page = item;">{{item}}</a>
+
+                    <!-- No click event -->
+                    <a ng-if="(item == '..' || item == '...')">{{item}}</a>
+
+                    <a ng-if="item == 'Next'" ng-click="Next()">Next</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+@*pcnlist*@
+@*etolist*@
+<div class="container table-responsive scrollArea" ng-show="list4" ng-if="etolist" tyle="height:900px">
+    <h2 ng-init="search()">Search Result</h2>
+    @*<div layout="row">
+            <md-input-container flex="100" ng-init="search()" >
+                <label>Search keyword...</label>
+                <input  ng-model="criteria.searchtext" ng-model-options="{debounce {'default' 1000, 'blur'0}}">
+            </md-input-container>
+        </div>*@
+
+
+    <table class="table  table-hover table-condensed " style="color: #000;">
+        <thead>
+            <tr>
+                <div class="row" style="background-color:#f1e1d1; padding:7px;">
+                    <div class="col-lg-6 ">
+                        Showing: {{(criteria.page -1) * criteria.pagesize + 1}} -
+                        {{ ((criteria.page -1) * criteria.pagesize + paging.showing)}}
+                        of {{paging.total}} Records
+                    </div>
+
+                    <div class="col-lg-6 ">
+                        <div class="pull-right">
+                            Page: <input type='number'
+                                         ng-model='criteria.page'
+                                         min="1"
+                                         max="{{paging.totalpages}}"
+                                         style='width:70px;' />
+                            of {{paging.totalpages}}
+                            with page size <select ng-model="criteria.pagesize"
+                                                   ng-options="obj as obj for obj in paging.pagingOptions" />
+                        </div>
+                    </div>
+                </div>
+
+            </tr>
+            <tr>
+                <th ng-click="criteria.sort = 'itemid';">
+                    ETO Number
+                    <span class="fa fa-sort" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('itemname')">
+                    Project Name
+                    <span class="fa fa-sort" ng-show="sortKey=='itemname'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('itemtype')">
+                    Order Number
+                    <span class="fa fa-sort" ng-show="sortKey=='itemtype'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('revision')">
+                    Revision
+                    <span class="fa fa-sort" ng-show="sortKey=='revision'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('revision')">
+                    Customer Name
+                    <span class="fa fa-sort" ng-show="sortKey=='revision'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="table">
+            <tr class="animate" ng-repeat-start="user in etodatalist">
+                @*<tr class="animate" dir-paginate-start="user in itemlist|orderBy:sortBy:reverse|filter:search|productsPerPage:10">*@
+
+                <td ng-click="getetodetail(user.eid,$index)">
+                    <i ng-if="user.expanded" ng-click="user.expanded = false" class="fa fa-minus"><img src="~/images/up.png" /></i>
+                    <i ng-if="!user.expanded" ng-click="user.expanded = true" class="fa fa-plus"><img src="~/images/down.png" /></i>
+                    {{user.etoid}}
+                    @*&nbsp;&nbsp; <a   class="two" ><md-tooltip md-direction="left">Refresh</md-tooltip> <md-tooltip md-direction="bottom">View Details</md-tooltip></a>*@
+                </td>
+                <td><a style="cursor:not-allowed"  > {{user.projectname}}</a></td>
+                <td>{{user.weirorderno}}</td>
+                <td>{{user.revision}}</td>
+                <td>{{user.customer}}</td>
+            <tr ng-if="user.expanded" ng-repeat-end="">
+                <td>
+                    <table>
+                        <thead>
+                            <tr>&nbsp; &nbsp;&nbsp; &nbsp;<th>Document</th> &nbsp;&nbsp; &nbsp;<th>Routing</th>&nbsp; &nbsp;&nbsp; &nbsp;<th>Order Parts</th>&nbsp; &nbsp;&nbsp; &nbsp;<th>References</th> </tr>
+                            <tr ng-repeat="x in etodetail">
+                                &nbsp; &nbsp;&nbsp; &nbsp;
+                                @*<td ng-if="x.hasga_drawingid==null">{{x.hasga_itemid}}</td>
+                                <td ng-if="x.hasga_drawingid!=null"><a   ng-click="sendtodoc(x.hasga_drawingid)">{{x.hasga_itemid}}</a></td>&nbsp; &nbsp;&nbsp; &nbsp;*@
+
+                                <td ng-if="x.hasdocument_drawingid==null">{{x.hasdocument_itemid}}</td>
+                                <td ng-if="x.hasdocument_drawingid!=null"><a   ng-click="sendtodoc(x.hasdocument_drawingid)">{{x.hasdocument_itemid}}</a>
+                                <td>{{x.hasdocument_itemid}}</td>&nbsp; &nbsp;&nbsp; &nbsp;
+                                <td ng-if="x.hasdocument_drawingid==null">{{x.hasdocument_itemid}}</td>
+                                <td ng-if="x.hasdocument_drawingid!=null"><a   ng-click="sendtodoc(x.hasdocument_drawingid)">{{x.hasdocument_itemid}}</a>
+                                <td>{{x.hasdocument_itemid}}</td>&nbsp; &nbsp;&nbsp; &nbsp;
+                                <td ng-if="x.hasrouting_drawingid==null">{{x.hasrouting_itemid}}</td>
+                                <td ng-if="x.hasrouting_drawingid!=null"><a   ng-click="sendtodoc(x.hasrouting_drawingid)">{{x.hasrouting_itemid}}</a>
+                                <td>{{x.hasrouting_itemid}}</td>
+                            </tr>
+                        </thead>
+                    </table>
+                </td>
+            </tr>
+
+            </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="pull-right">
+            <ul class="pagination">
+                <li ng-class="{'active': item === criteria.page}" ng-repeat='item in paging.pagearray'>
+
+                    <a ng-if="item == 'Prev'" ng-click="Prev()">Prev</a>
+
+                    <a ng-if="(!(item == 'Prev' || item == 'Next' ||  item == '..' || item == '...'))"
+                       ng-click="criteria.page = item;">{{item}}</a>
+
+                    <!-- No click event -->
+                    <a ng-if="(item == '..' || item == '...')">{{item}}</a>
+
+                    <a ng-if="item == 'Next'" ng-click="Next()">Next</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+@*etolist*@
+
+
+@*ledlist*@
+<div class="container table-responsive scrollArea" ng-show="list5" ng-if="ledlist" style="height:900px">
+    <h2 ng-init="search()">Search Result</h2>
+  
+
+    <table class="table  table-hover table-condensed " style="color: #000;">
+        <thead>
+            <tr>
+                <div class="row" style="background-color:#f1e1d1; padding:7px;">
+                    <div class="col-lg-6 ">
+                        Showing: {{(criteria.page -1) * criteria.pagesize + 1}} -
+                        {{ ((criteria.page -1) * criteria.pagesize + paging.showing)}}
+                        of {{paging.total}} Records
+                    </div>
+
+                    <div class="col-lg-6 ">
+                        <div class="pull-right">
+                            Page: <input type='number'
+                                         ng-model='criteria.page'
+                                         min="1"
+                                         max="{{paging.totalpages}}"
+                                         style='width:70px;' />
+                            of {{paging.totalpages}}
+                            with page size <select ng-model="criteria.pagesize"
+                                                   ng-options="obj as obj for obj in paging.pagingOptions" />
+                        </div>
+                    </div>
+                </div>
+
+            </tr>
+            <tr>
+                <th ng-click="criteria.sort = 'pcnid';">
+                    Lifting Equipment Part Number
+
+                    <span class="fa fa-sort" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('revision')">
+                    Lifting Eqipment Description
+
+                    <span class="fa fa-sort" ng-show="sortKey=='revision'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('itemtype')">
+                    Lifting Equipment Document Number
+
+                    <span class="fa fa-sort" ng-show="sortKey=='Synopsis'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+                <th ng-click="sort('itemname')">
+                    Lifting Equipment Part Revision
+                    <span class="fa fa-sort" ng-show="sortKey=='description'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+
+                <th ng-click="sort('itemname')">
+                    Component where used
+                    <span class="fa fa-sort" ng-show="sortKey=='description'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+
+                <th ng-click="sort('itemname')">
+                    Product where used
+
+                    <span class="fa fa-sort" ng-show="sortKey=='description'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+
+                <th ng-click="sort('itemname')">
+                    Lifting Equipment Part Status
+                    <span class="fa fa-sort" ng-show="sortKey=='description'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="table">
+            <tr class="animate" ng-repeat-start="user in leddatalist">
+                @*<tr class="animate" dir-paginate-start="user in itemlist|orderBy:sortBy:reverse|filter:search|productsPerPage:10">*@
+
+                <td>
+                    <i ng-if="user.expanded" ng-click="user.expanded = false" class="fa fa-minus"><img src="~/images/up.png" /></i>
+                    <i ng-if="!user.expanded" ng-click="user.expanded = true" class="fa fa-plus"><img src="~/images/down.png" /></i>
+                    &nbsp;&nbsp; <a   class="two" data-toggle="modal" data-target="#myModal1" ng-click="ViewDeatails1(user.iid)"><md-tooltip md-direction="left"  >Refresh</md-tooltip>{{user.LEDItemID}} <md-tooltip md-direction="bottom">View Details</md-tooltip></a>
+                </td>
+                <td><a style="cursor:not-allowed"  > {{user.description}}</a></td>
+                <td><a   ng-click="sendtodoc(user.drawingid)">{{user.drawingid}}</a></td>
+                <td>{{user.revision}}</td>
+                @*<td>{{user.ledtype}}</td>*@
+                <td>{{user.partwhere}}</td>
+                <td>{{user.productwhere}}</td>
+                <td>{{user.ledstatus}}</td>
+            <tr ng-if="user.expanded" ng-repeat-end="">
+                <td colspan="8" style="background: #fff;">
+                    <table>
+                        <thead>
+                            <tr> <th>Type:</th><td>{{user.ledtype}}</td> </tr>
+                            <tr> <th>Tech Group:</th> <td>{{user.dco}}</td></tr>
+                            <tr> <th>WLL (kg):</th><td>{{user.wll}}</td> </tr>
+                            <tr> <th>Tare (kg):</th><td>{{user.tare}}</td> </tr>
+                            <tr> <th>Instruction Document:</th> <td>{{user.document}}</td></tr>
+                            <tr> <th>Certification:</th> <td>{{user.certification}}</td></tr>
+                            <tr> <th>Length:</th><td>{{user.length}}</td> </tr>
+                            <tr> <th>Height:</th> <td>{{user.height}}</td></tr>
+                            <tr> <th>Width:</th> <td>{{user.width}}</td></tr>
+                        </thead>
+                    </table>
+                </td>
+            </tr>
+            </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="pull-right">
+            <ul class="pagination">
+                <li ng-class="{'active': item === criteria.page}" ng-repeat='item in paging.pagearray'>
+
+                    <a ng-if="item == 'Prev'" ng-click="Prev()">Prev</a>
+
+                    <a ng-if="(!(item == 'Prev' || item == 'Next' ||  item == '..' || item == '...'))"
+                       ng-click="criteria.page = item;">{{item}}</a>
+
+                    <!-- No click event -->
+                    <a ng-if="(item == '..' || item == '...')">{{item}}</a>
+
+                    <a ng-if="item == 'Next'" ng-click="Next()">Next</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+@*ledlist*@
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="myModal1" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>Led Part Details</h2>
+                    </div>
+                </md-toolbar>
+                <table class="table table-striped" style="color: #000;    font-size: 10px">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th tabindex="0">
+                                LED Part Number
+                            </th>
+
+                            <th tabindex="0">
+                                LED Part Type
+                            </th>
+                            <th tabindex="0">
+                                LED Part Revision
+                            </th>
+                            <th tabindex="0">
+                                LED Document Number
+                            </th>
+                           
+                            <th tabindex="0">
+                                LED Part Status
+                            </th>
+                            <th tabindex="0">
+                                Site
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>{{items2[0].itemid}}</td>
+
+                            <td>{{items2[0].itemtype}}</td>
+                            <td>{{items2[0].revision}}</td>
+                            <td>{{items2[0].drawingid}}</td>
+                      
+                            <td>{{items2[0].name}}</td>
+                            <td>{{items2[0].site}}</td>
+                        </tr>
+
+                    </thead>
+                    <tbody id="table">
+
+                        <tr class="thead-dark">
+                            <th>LED Part Description:</th>
+                            <th>Tech Group:</th>
+                            <th>Length:</th>
+                            <th>Height:</th>
+                            <th>Width:</th>
+                            <th>Weight:</th>
+                        </tr>
+                        <tr>
+                            <td>{{items2[0].description}}</td>
+                            <td>{{items2[0].dcoid}}</td>
+                            <td>{{items2[0].length}}</td>
+                            <td>{{items2[0].height}}</td>
+                            <td>{{items2[0].width}}</td>
+                            <td>{{items2[0].weight}}</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>Document Details</h2>
+                    </div>
+                </md-toolbar>
+                <table class="table table-striped" style="color: #000;    font-size: 10px">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th tabindex="0">
+                                LED   Document Name
+                            </th>
+                            <th tabindex="0">
+                                LED   Document Type
+                            </th>
+                            <th tabindex="0">
+                                LED  Document Description
+                            </th>
+                            <th tabindex="0">
+                                LED  Document Status
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>{{items2[0].drawingid}}</td>
+                            <td>{{items2[0].doctype}}</td>
+                            <td>{{items2[0].docdesc}}</td>
+                            <td>{{items2[0].docstatus}}</td>
+                        </tr>
+                    </thead>
+                </table>
+
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>PCN Details</h2>
+                    </div>
+                </md-toolbar>
+                <table class="table table-striped" style="color: #000;    font-size: 10px">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th tabindex="0">
+                                PCN Number
+                            </th>
+                            <th tabindex="0">
+                                Part Revision
+                            </th>
+                            <th tabindex="0">
+                                Synopsis
+                            </th>
+                            <th tabindex="0">
+                                PCN Description
+                            </th>
+                            <th tabindex="0">
+                                Problem Part
+                            </th>
+                            <th tabindex="0">
+                                Problem Part Revision
+                            </th>
+                            <th tabindex="0">
+                                Solution Part
+                            </th>
+                            <th tabindex="0">
+                                Solution Part Revision
+                            </th>
+                            <th tabindex="0">
+                                Impacted Part
+                            </th>
+                            <th tabindex="0">
+                                Impacted Part Revision
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>{{items2[0].pcnid}}</td>
+                            <td>{{items2[0].revision}}</td>
+                            <td>{{items2[0].synopsis}}</td>
+                            <td>{{items2[0].pcndescription}}</td>
+                            <td>{{items2[0].problemitem_iid}}</td>
+                            <td>{{items2[0].problemitem_revision}}</td>
+                            <td>{{items2[0].solutionitem_iid}}</td>
+                            <td>{{items2[0].solutionitem_revision}}</td>
+
+                            <td>{{items2[0].impacteditem_iid}}</td>
+                            <td>{{items2[0].impacteditem_revision}}</td>
+
+                        </tr>
+                    </thead>
+                </table>
+
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>ETO Details</h2>
+                    </div>
+                </md-toolbar>
+                <table class="table table-striped" style="color: #000;    font-size: 12px">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th tabindex="0">
+                                ETO Number
+                            </th>
+                            <th tabindex="0">
+                                Project Name
+                            </th>
+                            <th tabindex="0">
+                                Order Number
+                            </th>
+                            <th tabindex="0">
+                                Customer Name
+                            </th>
+                            <th tabindex="0">
+                                GA Drawing
+                            </th>
+                            <th tabindex="0">
+                                Document
+                            </th>
+                            <th tabindex="0">
+                                Routing
+                            </th>
+                            <th tabindex="0">
+                                Order Part
+                            </th>
+                            <th tabindex="0">
+                                References
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>{{items2[0].etonumber}}</td>
+                            <td>{{items2[0].projectname}}</td>
+                            <td>{{items2[0].ordernumber}}</td>
+                            <td>{{items2[0].customer}}</td>
+                            <td>{{items2[0].ga}}</td>
+                            <td>{{items2[0].document}}</td>
+                            <td>{{items2[0].routing}}</td>
+                            <td>{{items2[0].docpart}}</td>
+                            <td>{{items2[0].ref}}</td>
+                            <td></td>
+
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>Part Details</h2>
+                    </div>
+                </md-toolbar>
+                <table class="table table-striped" style="color: #000;    font-size: 10px">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th tabindex="0">
+                                Part Number
+                            </th>
+
+                            <th tabindex="0">
+                                PartType
+                            </th>
+                            <th tabindex="0">
+                                Part Revision
+                            </th>
+                            <th tabindex="0">
+                                Document Number
+                            </th>
+                            <th tabindex="0">
+                                Date Release
+                            </th>
+                            <th tabindex="0">
+                                Part Status
+                            </th>
+                            <th tabindex="0">
+                                Site
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>{{items1[0].itemid}}</td>
+
+                            <td>{{items1[0].itemtype}}</td>
+                            <td>{{items1[0].revision}}</td>
+                            <td>{{items1[0].drawingid}}</td>
+                            <td>{{items1[0].datereleased}}</td>
+                            <td>{{items1[0].name}}</td>
+                            <td>{{items1[0].site}}</td>
+                        </tr>
+
+                    </thead>
+                    <tbody id="table">
+
+                        <tr class="thead-dark">
+                            <th>Part Description:</th>
+                            <th>Legacy Part Number:</th>
+                            <th>Legacy Document Number:</th>
+                            <th>Tech Group:</th>
+                            <th>Length:</th>
+                            <th>Height:</th>
+                            <th>Width:</th>
+                            <th>Weight:</th>
+                        </tr>
+                        <tr>
+                            <td>{{items1[0].description}}</td>
+                            <td>{{items1[0].legacy_part_number}}</td>
+                            <td>{{items1[0].legacy_document_number}}</td>
+                            <td>{{items1[0].dcoid}}</td>
+                            <td>{{items1[0].length}}</td>
+                            <td>{{items1[0].height}}</td>
+                            <td>{{items1[0].width}}</td>
+                            <td>{{items1[0].weight}}</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>Document Details</h2>
+                    </div>
+                </md-toolbar>
+                <table class="table table-striped" style="color: #000;    font-size: 10px">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th tabindex="0">
+                                Document Name
+                            </th>
+                            <th tabindex="0">
+                                Document Type
+                            </th>
+                            <th tabindex="0">
+                                Document Description
+                            </th>
+                            <th tabindex="0">
+                                Document Status
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>{{items1[0].drawingid}}</td>
+                            <td>{{items1[0].doctype}}</td>
+                            <td>{{items1[0].docdesc}}</td>
+                            <td>{{items1[0].docstatus}}</td>
+                        </tr>
+                    </thead>
+                </table>
+
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>PCN Details</h2>
+                    </div>
+                </md-toolbar>
+                <table class="table table-striped" style="color: #000;    font-size: 10px">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th tabindex="0">
+                                PCN Number
+                            </th>
+                            <th tabindex="0">
+                                Part Revision
+                            </th>
+                            <th tabindex="0">
+                                Synopsis
+                            </th>
+                            <th tabindex="0">
+                                PCN Description
+                            </th>
+                            <th tabindex="0">
+                                Problem Part
+                            </th>
+                            <th tabindex="0">
+                                Problem Part Revision
+                            </th>
+                            <th tabindex="0">
+                                Solution Part
+                            </th>
+                            <th tabindex="0">
+                                Solution Part Revision
+                            </th>
+                            <th tabindex="0">
+                                Impacted Part
+                            </th>
+                            <th tabindex="0">
+                                Impacted Part Revision
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>{{items1[0].pcnid}}</td>
+                            <td>{{items1[0].revision}}</td>
+                            <td>{{items1[0].synopsis}}</td>
+                            <td>{{items1[0].pcndescription}}</td>
+                            <td>{{items1[0].problemitem_iid}}</td>
+                            <td>{{items1[0].problemitem_revision}}</td>
+                            <td>{{items1[0].solutionitem_iid}}</td>
+                            <td>{{items1[0].solutionitem_revision}}</td>
+
+                            <td>{{items1[0].impacteditem_iid}}</td>
+                            <td>{{items1[0].impacteditem_revision}}</td>
+
+                        </tr>
+                    </thead>
+                </table>
+
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>ETO Details</h2>
+                    </div>
+                </md-toolbar>
+                <table class="table table-striped" style="color: #000;    font-size: 12px">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th tabindex="0">
+                                ETO Number
+                            </th>
+                            <th tabindex="0">
+                                Project Name
+                            </th>
+                            <th tabindex="0">
+                                Order Number
+                            </th>
+                            <th tabindex="0">
+                                Customer Name
+                            </th>
+                          
+                            <th tabindex="0">
+                                Document
+                            </th>
+                            <th tabindex="0">
+                                Routing
+                            </th>
+                            <th tabindex="0">
+                                Order Part
+                            </th>
+                            <th tabindex="0">
+                                References
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>{{items1[0].etonumber}}</td>
+                            <td>{{items1[0].projectname}}</td>
+                            <td>{{items1[0].ordernumber}}</td>
+                            <td>{{items1[0].customer}}</td>
+                        
+                            <td>{{items1[0].document}}</td>
+                            <td>{{items1[0].routing}}</td>
+                            <td>{{items1[0].docpart}}</td>
+                            <td>{{items1[0].ref}}</td>
+                            <td></td>
+
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script>
+    $('.search').mouseover(function () {
+        $(this).find('img').css('width', '70px')
+    })
+    $('.search').mouseout(function () {
+        $(this).find('img').css('width', '60px')
+    })
+</script>

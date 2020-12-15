@@ -1,0 +1,556 @@
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 container">
+
+    <form style="margin-top: -35px;">
+
+
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>Lifting Equipment Search</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label for="input_led_id"> Lifting Equipment Part Number</label>
+                        <input name="PNumber" data-toggle="tooltip" title="Engineering Part number of Lifting Equipment / Transport Cradle" id="input_led_id" ng-keypress="SearchLEDformEnter($event)" ng-model="liftpartNumber">
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label> Lifting Equipment Document Number</label>
+                        <input name="DocNumber" data-toggle="tooltip" title="Engineering Drawing number of Lifting Equipment / Transport Cradle" ng-keypress="SearchLEDformEnter($event)" ng-model="liftDocNumber">
+                    </md-input-container>
+                    <!--@*<md-input-container flex="100">
+                        <label>Lifting Equipment Part Number</label>
+                        <autocomplete ng-model="liftpartNumber" attr-placeholder="Type to search LED number..." click-activation="true" data="movies" on-type="doSomething" on-select="doSomethingElse"></autocomplete>
+                        <img class="spinner" ng-show="spinner" src="~images/loader.gif" />
+                    </md-input-container>*@-->
+                </div>
+            </div>
+
+
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100" ng-init="getLEDtype()">
+                        <label>Lifting Equipment Type</label>
+                        <md-select name="PartType" ng-model="liftPartType">
+                            <md-option value="0" selected>All</md-option>
+                            <md-option ng-repeat="a in itemLEDlist" value="{{a.id}}">{{a.name}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100" ng-init="getLEDStatus()">
+                        <label>Lifting Equipment Part Status</label>
+                        <md-select name="liftpartStatus" ng-model="liftpartStatus">
+                            <md-option value="0" selected>All</md-option>
+                            <md-option ng-repeat="a in itemgetLEDStatuslist" value="{{a.id}}">{{a.name}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </div>
+
+
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>Component where used</label>
+                        <input name="clientName" data-toggle="tooltip" title="Applicable only for Lifting Equipment, basically identifies the components for which Lifting Equipment can be used" ng-keypress="SearchLEDformEnter($event)" ng-model="Compwhereused">
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>Product where used</label>
+                        <input name="clientName" data-toggle="tooltip" title="Applicable only for Transport Cradle, basically identifies the products for which this Transport Cradle can be used" ng-keypress="SearchLEDformEnter($event)" ng-model="Productwhere">
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>Has Certification</label>
+                        <md-select name="hasCertification" ng-model="hasCertification">
+                            <md-option value="" selected></md-option>
+							<md-option value="1">Yes</md-option>
+                            <md-option value="0">No</md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>Has Instruction Document</label>
+                        <md-select name="Hasdocument" ng-model="hasInsDoc">
+                            <md-option value="" selected></md-option>
+							<md-option value="1">Yes</md-option>
+                            <md-option value="0">No</md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>Tare (kg)</label>
+                        <md-select name="tare" ng-model="tare">
+                            <md-option value="NULL" selected>All</md-option>
+                            <md-option value="<">  < </md-option>
+                            <md-option value=">">  > </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>0.0</label>
+                        <input ng-model="tarevalue" />
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>WLL (kg)</label>
+                        <md-select name="WLLValue" ng-model="wll">
+                            <md-option value="NULL" selected>All</md-option>
+                            <md-option value="<">  < </md-option>
+                            <md-option value=">">  > </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>0.0</label>
+                        <input ng-model="WLLValue" ng-keypress="SearchLEDformEnter($event)" />
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>Lifting Equipment Description</label>
+                        <input name="clientName" data-toggle="tooltip" title="Engineering part description of  Lifting Equipment / Transport Cradle" ng-keypress="SearchLEDformEnter($event)" ng-model="liftdesc">
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>Search By</label>
+                        <md-select name="SearchBy" ng-model="SearchBy">
+                            <md-option value="0" selected>All</md-option>
+                            <md-option value="1">Lifting Equipment</md-option>
+                            <md-option value="2">Component</md-option>
+                            <md-option value="3">Product</md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </div>
+
+            <div class="row search_button">
+                <div class="col-sm-12">
+
+                    <div class="col-sm-4">
+                        <md-button md-no-ink type="reset" ng-click="resetLEDValue()" class="md-raised">CLEAR</md-button>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <md-button md-no-ink ng-click="SearchLEDform()" class="md-raised md-primary ledbtn">SEARCH</md-button>
+                    </div>
+                    <div class="col-sm-4">
+                        <div align="right">(Asterisk(*) can be used to perform wildcard searches) </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+    <div class="container table-responsive scrollArea" ng-show="list5" style="height:900px">
+        <div>
+            <ul class="pagination pull-right">
+                <li ng-class="{'active': item === criteria.page}" ng-repeat='item in paging.pagearray'>
+
+                    <a ng-if="item == 'Prev'" ng-click="pagelistClick(leddatalist); Prev()">Prev</a>
+
+                    <a ng-if="(!(item == 'Prev' || item == 'Next' ||  item == '..' || item == '...'))"
+                        ng-click="pagelistClick(leddatalist);criteria.page = item;">{{item}}</a>
+
+                    <!-- No click event -->
+                    <a ng-if="(item == '..' || item == '...')">{{item}}</a>
+
+                    <a ng-if="item == 'Next'" ng-click="pagelistClick(leddatalist); Next()">Next</a>
+                </li>
+            </ul>
+        </div>
+        <h2 ng-init="search()">Search Result</h2>
+        <table class="table  table-hover table-condensed " style="color: #000;">
+            <thead>
+                <tr>
+                    <div class="row" style="background-color:#f1e1d1; padding:7px;">
+                        <div class="col-lg-6 ">
+                            Showing: {{ leddatalist.length>0?(criteria.page -1) * criteria.pagesize + 1:0}} -
+                            {{ leddatalist.length>0?((criteria.page -1) * criteria.pagesize + paging.showing):0}}
+                            of {{paging.total}} Records
+                        </div>
+
+                        <div class="col-lg-6 ">
+                            <div class="pull-right">
+                                Page: <input type='number'
+                                             ng-model='criteria.page'
+                                             min="1"
+                                             max="{{paging.totalpages}}"
+                                             style='width:70px;' />
+                                of {{paging.totalpages}}
+                                with page size <select ng-model="criteria.pagesize"
+                                                       ng-options="obj as obj for obj in paging.pagingOptions" />
+                            </div>
+                        </div>
+                    </div>
+
+                </tr>
+                <tr>
+                    <th ng-click="criteria.sort = 'pcnid';">
+                        <i ng-click="expandCollapseAll( !isexpanded,leddatalist);isexpanded=!isexpanded">
+                            <i ng-if="isexpanded" class="fa fa-minus"><img src="images/up.png" /></i>
+                            <i ng-if="!isexpanded" class="fa fa-plus"><img src="images/down.png" /></i>
+                        </i>
+                        Lifting Equipment Part Number
+
+                        <span class="fa fa-sort" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('revision')">
+                        Lifting Eqipment Description
+
+                        <span class="fa fa-sort" ng-show="sortKey=='revision'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('itemtype')">
+                        Lifting Equipment Document Number
+
+                        <span class="fa fa-sort" ng-show="sortKey=='Synopsis'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('itemname')">
+                        Lifting Equipment Part Revision
+                        <span class="fa fa-sort" ng-show="sortKey=='description'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+
+                    <!--<th ng-click="sort('itemname')">
+                        Component where used
+                        <span class="fa fa-sort" ng-show="sortKey=='description'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+
+                    <th ng-click="sort('itemname')">
+                        Product where used
+
+                        <span class="fa fa-sort" ng-show="sortKey=='description'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th> -->
+
+                    <th ng-click="sort('itemname')">
+                        Lifting Equipment Part Status
+                        <span class="fa fa-sort" ng-show="sortKey=='description'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="table">
+                <tr class="animate" ng-repeat-start="user in leddatalist">
+
+                    <td>
+                        <i ng-if="user.expanded" ng-click="user.expanded = false" class="fa fa-minus"><img src="images/up.png" /></i>
+                        <i ng-if="!user.expanded" ng-click="user.expanded = true" class="fa fa-plus"><img src="images/down.png" /></i>
+                        <!--&nbsp;&nbsp; <a   class="two"><md-tooltip md-direction="left">Refresh</md-tooltip>{{user.LEDItemID}} <md-tooltip md-direction="bottom">View Details</md-tooltip></a> -->
+						<!--&nbsp;&nbsp; <a   class="two" data-toggle="modal" data-target="#myModal1" ng-click="ViewDeatails1(user.iid)">--><md-tooltip md-direction="left"  >Refresh</md-tooltip>{{user.LEDItemID}} <md-tooltip md-direction="bottom">View Details</md-tooltip><!--</a>-->
+                   </td>
+                    <td>{{user.description}}</td>
+                    <td><a   ng-click="sendtodoc(user.drawingid)">{{user.drawingid}}</a></td>
+                    <td>{{user.revision}}</td>
+                    <!--@*
+                    <td>{{user.ledtype}}</td>*@
+                    <td>{{user.partwhere}}</td>
+                    <td>{{user.productwhere}}</td>-->
+                    <td>{{user.ledstatus}}</td> 
+                <tr ng-if="user.expanded" ng-repeat-end="">
+                    <td colspan="10" style="background: #fff;">
+                        <table>
+                            <thead>
+                                <tr> <th>Type:</th><td>{{user.ledtype}}</td> </tr>
+                                <tr> <th>Tech Group:</th> <td>{{user.dco}}</td></tr>
+                                <tr> <th>WLL (kg):</th><td>{{user.wll}}</td> </tr>
+                                <tr> <th>Tare (kg):</th><td>{{user.tare}}</td> </tr>
+                                <tr> <th>Instruction Document:</th>
+								<td style="white-space: nowrap; text-overflow:ellipsis; max-width:1px; &:active,&:hover{overflow:visible;}">
+                                    <span title="{{itt}}" ng-repeat="itt in user.instructiondoc| split:',':0" ng-click="sendtodoc(itt)"><a>{{itt}} </a><br /> </span></td>
+								</tr>
+                                <tr> <th>Certification:</th> 
+								<td style="white-space: nowrap; text-overflow:ellipsis; max-width:1px; &:active,&:hover{overflow:visible;}">
+                                    <span title="{{yyy}}" ng-repeat="yyy in user.certificationdoc| split:',':0" ng-click="sendtodoc(yyy)"><a>{{yyy}} </a><br /> </span></td>
+								
+								<!--<td>{{user.leddetail[0].certification}}</td>-->
+								
+								</tr>
+                                <tr> <th>Component where used:</th> <td>{{user.partname}}</td></tr>
+                                <tr> <th>Product where used:</th> <td>{{user.productname}}</td></tr>
+                                <tr> <th>Length:</th><td>{{user.length}}</td> </tr>
+                                <tr> <th>Height:</th> <td>{{user.height}}</td></tr>
+                                <tr> <th>Width:</th> <td>{{user.width}}</td></tr>
+                            </thead>
+                        </table>
+                    </td>
+                </tr>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="pull-right">
+                <ul class="pagination">
+                    <li ng-class="{'active': item === criteria.page}" ng-repeat='item in paging.pagearray'>
+
+                        <a ng-if="item == 'Prev'" ng-click="pagelistClick(leddatalist); Prev()">Prev</a>
+
+                        <a ng-if="(!(item == 'Prev' || item == 'Next' ||  item == '..' || item == '...'))"
+                           ng-click="pagelistClick(leddatalist); criteria.page = item;">{{item}}</a>
+
+                        <!-- No click event -->
+                        <a ng-if="(item == '..' || item == '...')">{{item}}</a>
+
+                        <a ng-if="item == 'Next'" ng-click="pagelistClick(leddatalist); Next()">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="myModal1" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>Led Part Details</h2>
+                    </div>
+                </md-toolbar>
+                <table class="table table-striped" style="color: #000;    font-size: 10px">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th tabindex="0">
+                                LED Part Number
+                            </th>
+
+                            <th tabindex="0">
+                                LED Part Type
+                            </th>
+                            <th tabindex="0">
+                                LED Part Revision
+                            </th>
+                            <th tabindex="0">
+                                LED Document Number
+                            </th>
+
+                            <th tabindex="0">
+                                LED Part Status
+                            </th>
+                            <th tabindex="0">
+                                Site
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>{{items2[0].itemid}}</td>
+
+                            <td>{{items2[0].itemtype}}</td>
+                            <td>{{items2[0].revision}}</td>
+                            <td>{{items2[0].drawingid}}</td>
+
+                            <td>{{items2[0].name}}</td>
+                            <td>{{items2[0].site}}</td>
+                        </tr>
+
+                    </thead>
+                    <tbody id="table">
+
+                        <tr class="thead-dark">
+                            <th>LED Part Description:</th>
+                            <th>Tech Group:</th>
+                            <th>Length:</th>
+                            <th>Height:</th>
+                            <th>Width:</th>
+                            <th>Weight:</th>
+                        </tr>
+                        <tr>
+                            <td>{{items2[0].description}}</td>
+                            <td>{{items2[0].dcoid}}</td>
+                            <td>{{items2[0].length}}</td>
+                            <td>{{items2[0].height}}</td>
+                            <td>{{items2[0].width}}</td>
+                            <td>{{items2[0].weight}}</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>Document Details</h2>
+                    </div>
+                </md-toolbar>
+                <table class="table table-striped" style="color: #000;    font-size: 10px">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th tabindex="0">
+                                LED   Document Name
+                            </th>
+                            <th tabindex="0">
+                                LED   Document Type
+                            </th>
+                            <th tabindex="0">
+                                LED  Document Description
+                            </th>
+                            <th tabindex="0">
+                                LED  Document Status
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>{{items2[0].drawingid}}</td>
+                            <td>{{items2[0].doctype}}</td>
+                            <td>{{items2[0].docdesc}}</td>
+                            <td>{{items2[0].docstatus}}</td>
+                        </tr>
+                    </thead>
+                </table>
+
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>PCN Details</h2>
+                    </div>
+                </md-toolbar>
+                <table class="table table-striped" style="color: #000;    font-size: 10px">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th tabindex="0">
+                                PCN Number
+                            </th>
+                            <th tabindex="0">
+                                Part Revision
+                            </th>
+                            <th tabindex="0">
+                                Synopsis
+                            </th>
+                            <th tabindex="0">
+                                PCN Description
+                            </th>
+                            <th tabindex="0">
+                                Problem Part
+                            </th>
+                            <th tabindex="0">
+                                Problem Part Revision
+                            </th>
+                            <th tabindex="0">
+                                Solution Part
+                            </th>
+                            <th tabindex="0">
+                                Solution Part Revision
+                            </th>
+                            <th tabindex="0">
+                                Impacted Part
+                            </th>
+                            <th tabindex="0">
+                                Impacted Part Revision
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>{{items2[0].pcnid}}</td>
+                            <td>{{items2[0].revision}}</td>
+                            <td>{{items2[0].synopsis}}</td>
+                            <td>{{items2[0].pcndescription}}</td>
+                            <td>{{items2[0].problemitem_iid}}</td>
+                            <td>{{items2[0].problemitem_revision}}</td>
+                            <td>{{items2[0].solutionitem_iid}}</td>
+                            <td>{{items2[0].solutionitem_revision}}</td>
+
+                            <td>{{items2[0].impacteditem_iid}}</td>
+                            <td>{{items2[0].impacteditem_revision}}</td>
+
+                        </tr>
+                    </thead>
+                </table>
+
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>ETO Details</h2>
+                    </div>
+                </md-toolbar>
+                <table class="table table-striped" style="color: #000;    font-size: 12px">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th tabindex="0">
+                                ETO Number
+                            </th>
+                            <th tabindex="0">
+                                Project Name
+                            </th>
+                            <th tabindex="0">
+                                Order Number
+                            </th>
+                            <th tabindex="0">
+                                Customer Name
+                            </th>
+                            <th tabindex="0">
+                                GA Drawing
+                            </th>
+                            <th tabindex="0">
+                                Document
+                            </th>
+                            <th tabindex="0">
+                                Routing
+                            </th>
+                            <th tabindex="0">
+                                Order Part
+                            </th>
+                            <th tabindex="0">
+                                References
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>{{items2[0].etonumber}}</td>
+                            <td>{{items2[0].projectname}}</td>
+                            <td>{{items2[0].ordernumber}}</td>
+                            <td>{{items2[0].customer}}</td>
+                            <td>{{items2[0].ga}}</td>
+                            <td>{{items2[0].document}}</td>
+                            <td>{{items2[0].routing}}</td>
+                            <td>{{items2[0].docpart}}</td>
+                            <td>{{items2[0].ref}}</td>
+                            <td></td>
+
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();   
+    });
+    </script>

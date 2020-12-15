@@ -1,0 +1,97 @@
+﻿<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 container"  ng-show="(AuthValue.role.indexOf('Admin') != -1)">
+    <form name="myForm" novalidate>
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>Create New User</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>Email</label>
+                        <input type="Email" name="userEmail" ng-keypress="AddUserFormEnter($event,myForm.$invalid)" placeholder="Email address" ng-model="userEmail" minlength="8" required="" />
+                        <span style="color:red; text-align:right; display:block; width: 400px;" ng-show="myForm.userEmail.$dirty && myForm.userEmail.$invalid">
+                            <span ng-show="myForm.userEmail.$error.required">Email is required.</span>
+                            <span ng-show="myForm.userEmail.$error.email">Invalid email address.</span>
+                        </span>
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100" ng-init="getusertype()">
+                        <label>User Type</label>
+                        <md-select name="usrRole" ng-model="usrRole.value" multiple="">
+                            <md-option ng-repeat="x in userlist" value="{{x.utid}}">{{x.name}}</md-option>
+                        </md-select>
+                        <span style="color:red; text-align:right; display:block; width: 400px;" ng-show="(!usrRole.value || usrRole.value=='')">
+                            <span>User Type is required.</span>
+                        </span>
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>First Name</label>
+                        <input name="firstName" ng-keypress="AddUserFormEnter($event,myForm.$invalid)" ng-model="firstName">
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>Last Name</label>
+                        <input name="lastName" ng-keypress="AddUserFormEnter($event,myForm.$invalid)" ng-model="lastName">
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>User Id</label>
+                        <input name="userId" ng-keypress="AddUserFormEnter($event,myForm.$invalid)" ng-model="userId">
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>Title</label>
+                        <input name="userTitle" ng-keypress="AddUserFormEnter($event,myForm.$invalid)" ng-model="userTitle">
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>Company Name</label>
+                        <input name="companyName" ng-keypress="AddUserFormEnter($event,myForm.$invalid)" ng-model="companyName">
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>Phone</label>
+                        <input name="userPhone" ng-keypress="AddUserFormEnter($event,myForm.$invalid)" ng-model="userPhone">
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="row search_button">
+                <div class="col-sm-12">
+                    <div class="col-sm-4">
+                        <md-button md-no-ink type="reset" ng-click="resetAddUserForm()" class="md-raised">CLEAR</md-button>
+                    </div>
+                    <div class="col-sm-4">
+                        <md-button ng-disabled="(myForm.$invalid || (!usrRole.value || usrRole.value==''))" md-no-ink ng-click="AddUserSubmitForm()" class="md-raised md-primary" ng-class='{"disableButton": (myForm.$invalid || (!usrRole.value || usrRole.value==""))}'>SUBMIT</md-button>
+                    </div>
+                    <div class="col-sm-4">
+                        <md-button type="button" href="#/admin/index" class="md-raised secondButton">&nbsp; User Search &nbsp;</md-button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12" style="text-align:center"><span ng-show="errordiv" style="color:{{color}}">{{errormsg}}</span></div>
+    </form>
+</div>

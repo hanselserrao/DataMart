@@ -1,0 +1,78 @@
+﻿<style>
+    md-input-container {
+        display: inline-block;
+        position: relative;
+        padding: 8px;
+        margin: 0px 0 !important;
+        vertical-align: middle;
+    }
+
+        md-input-container label {
+            padding-left: 15px !important;
+        }
+
+    .remember {
+        margin-left: 140px;
+        margin-bottom: 20px;
+    }
+</style>
+<script language="javascript">
+    //login();
+</script>
+
+
+
+<div>
+
+  
+
+    <md-content layout="row" layout-align="space-around" layout-padding="layout-padding" style="color: none !important;  background-color: none !important; " ng-cloak="ng-cloak" class="login-form">
+
+        <md-card flex="flex" flex-gt-sm="50" flex-gt-md="33">
+            <md-toolbar style="background-color: #fff !important; ">
+
+                <img class="logo" src="images/logo.png" />
+
+            </md-toolbar>
+      
+            <md-card-content>
+                <form>
+                    <md-card-content>
+
+                        <div class="col-md-12">
+                            <label class="col-md-4"><h4>Username</h4></label>
+
+                            <md-input-container style="width: 65%;" >
+      
+                                <input type="Email" name="Email" ng-keypress="loginter($event)" placeholder="Email address" ng-model="email" value="admin@admin.com" minlength="8" required="" />
+                          
+            
+                            </md-input-container>
+
+                        </div>
+                        <div class="col-md-12">
+                            <label class="col-md-4"><h4>Password</h4></label>
+                            <md-input-container style="width: 65%;">
+                                <input type="password" name="Password" ng-keypress="loginter($event)" ng-model="password" value="password" placeholder="8-16 chars,text,symbols,digits" required="" />
+                               
+                            </md-input-container>
+                        </div>
+
+                        <div class="col-md-12">
+                            <center>
+                                <!--//KAMLESH-ROLE-->
+                                <md-button type="button" ng-click="login()" class="md-raised md-primary">&nbsp; Login &nbsp;</md-button>
+                                <md-button type="button" href="#search" class="md-raised md-primary">&nbsp; Cancel &nbsp;</md-button><br />
+                                <span ng-show="errordiv" style="color:{{color}}">{{errormsg}}</span>
+                                <br />
+                                <!--  <a ng-click="forget(this)"><label style="color:dodgerblue">Forgot Password?</label></a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a ng-click="changepassword(this)"><label style="color:dodgerblue">Change Password?</label></a>
+                                 -->
+                            </center>
+                        </div>
+                    </md-card-content>
+                </form>
+            </md-card-content>
+        </md-card>
+    </md-content>
+</div>

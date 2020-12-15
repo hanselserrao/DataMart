@@ -1,0 +1,16 @@
+package atm;
+
+
+
+public enum EnumConnectStatus {
+	IDENTITY_OK,
+    IDENTITY_EMPTY_ERR,
+    PASSEORD_OK,
+    PASSWORD_BLANK_WARNING,
+    DRIVER_OK,
+    DRIVER_NOT_CORRECT_ERR,
+    CONN_URL_OK,
+    CONN_URL_NOT_CORRECT_ERR,
+    OTHER_ERR,
+    STATUS_OK
+}

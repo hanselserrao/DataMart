@@ -1,0 +1,159 @@
+﻿<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 container" ng-show="(AuthValue.role.indexOf('Admin') != -1)">
+    <form>
+        <div class="row">
+            <div class="col-sm-8">
+                <h1>USER SEARCH</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>User Name</label>
+                        <input name="usrName" ng-keypress="AdminsearchformEnter($event)" ng-model="usrName">
+                    </md-input-container>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>Email</label>
+                        <input name="usrEmail" ng-keypress="AdminsearchformEnter($event)" ng-model="usrEmail">
+                    </md-input-container>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>User ID</label>
+                        <input name="usrId" ng-keypress="AdminsearchformEnter($event)" ng-model="usrId">
+                    </md-input-container>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100" ng-init="getusertype()">
+                        <label>User Role</label>
+                        <md-select name="usrRole" ng-model="usrRole.value" multiple="">
+                            <md-option value="{{current.value}}" selected>{{current.label}}</md-option>
+                            <md-option ng-repeat="x in userlist" value="{{x.utid}}">{{x.name}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="row search_button">
+                <div class="col-sm-12">
+
+                    <div class="col-sm-3">
+                        <md-button md-no-ink type="reset" ng-click="resetAdminSearch()" class="md-raised">CLEAR</md-button>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <md-button md-no-ink ng-click="AdminSearchForm()" class="md-raised md-primary">SEARCH</md-button>
+                    </div>
+                    <div class="col-sm-3">
+                        <md-button md-no-ink ng-click="OpenAddUserForm()" class="md-raised secondButton">ADD USER</md-button>
+                    </div>
+                    <div class="col-sm-3">
+                        <div align="right">(Asterisk(*) can be used to perform wildcard searches) </div>
+                    </div>
+                </div>
+            </div>
+    </form>
+    <div class="container table-responsive " ng-show="UserList" style="height:900px">
+        <h2>Search Result</h2>
+        <div layout="row" ng-init="search()">
+            <!--@*<md-input-container flex="100">
+                <label>Search keyword...</label>
+                <input ng-model="criteria.searchtext" ng-model-options="{debounce {'default' 1000, 'blur'0}}">
+            </md-input-container>*@-->
+        </div>
+        <table class="table  table-hover table-condensed " style="color: #000;">
+            <thead>
+                <tr>
+                    <div class="row" style="background-color:#005eb8; padding:7px;color:white">
+                        <div class="col-lg-4 " ng-if="criteria">
+
+                            Showing: {{ userslist.length>0?(criteria.page -1) * criteria.pagesize + 1:0}} -
+                            {{ userslist.length>0?((criteria.page -1) * criteria.pagesize + paging.showing):0}}
+
+                            of {{paging.total}} Records
+                        </div>
+
+                        <div class="col-lg-3">
+                            Showing: Top  {{paging.total}} count of total records
+                        </div>
+                        <div class="col-lg-5 ">
+                            <div class="pull-right">
+                                Page: <input type='number'
+                                             ng-model='criteria.page'
+                                             min="1"
+                                             max="{{paging.totalpages}}"
+                                             style='width:70px;' />
+                                of {{paging.totalpages}}
+                                with page size <select ng-model="criteria.pagesize"
+                                                       ng-options="obj as obj for obj in paging.pagingOptions" />
+                            </div>
+                        </div>
+                    </div>
+
+                </tr>
+                <tr>
+
+                    <th ng-click="criteria.sort = 'username';">
+                        User Name
+                        <span class="fa fa-sort" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('email')">
+                        Email
+                        <span class="fa fa-sort" ng-show="sortKey=='email'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('userRole')">
+                        User Role
+                        <span class="fa fa-sort" ng-show="sortKey=='userRole'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('status')">
+                        Status
+                        <span class="fa fa-sort" ng-show="sortKey=='status'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('userId')">
+                        User ID
+                        <span class="fa fa-sort" ng-show="sortKey=='userId'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="table">
+                <tr class="animate" ng-repeat-start="user in userslist">
+                    <td>{{user.username}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.userRole}}</td>
+                    <td>{{user.status}}</td>
+                    <td>{{user.userId}}</td>
+                </tr>
+                <tr ng-repeat-end=""></tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="pull-right">
+                <ul class="pagination">
+                    <li ng-class="{'active': item === criteria.page}" ng-repeat='item in paging.pagearray'>
+
+                        <a ng-if="item == 'Prev'" ng-click="Prev()">Prev</a>
+
+                        <a ng-if="(!(item == 'Prev' || item == 'Next' ||  item == '..' || item == '...'))"
+                           ng-click="criteria.page = item;">{{item}}</a>
+
+                        <!-- No click event -->
+                        <a ng-if="(item == '..' || item == '...')">{{item}}</a>
+
+                        <a ng-if="item == 'Next'" ng-click="Next()">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>

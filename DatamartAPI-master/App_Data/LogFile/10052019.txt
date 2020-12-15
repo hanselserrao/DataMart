@@ -1,0 +1,66 @@
+<Activity>
+<DateTime>10/05/2019 14:30:44</DateTime>
+<Summary>Some info was loged on 10 May 2019 14:30:44</Summary>
+<Message>Document Webservice called</Message>
+</Activity>
+
+<Activity>
+<DateTime>10/05/2019 14:53:22</DateTime>
+<Summary>Some info was loged on 10 May 2019 14:53:22</Summary>
+<Message>Document Webservice called</Message>
+</Activity>
+
+<Activity>
+<DateTime>10/05/2019 15:16:30</DateTime>
+<Summary>Some info was loged on 10 May 2019 15:16:30</Summary>
+<Message>Document Webservice called</Message>
+</Activity>
+
+<Activity>
+<DateTime>10/05/2019 15:17:40</DateTime>
+<Summary>Some info was loged on 10 May 2019 15:17:40</Summary>
+<Message>Document Webservice called</Message>
+</Activity>
+
+<Activity>
+<DateTime>10/05/2019 15:17:47</DateTime>
+<Summary>Some info was loged on 10 May 2019 15:17:47</Summary>
+<Message>Document Webservice called</Message>
+</Activity>
+
+<Activity>
+<DateTime>10/05/2019 15:20:20</DateTime>
+<Summary>Some info was loged on 10 May 2019 15:20:20</Summary>
+<Message>Document Webservice called</Message>
+</Activity>
+
+<Activity>
+<DateTime>10/05/2019 15:20:36</DateTime>
+<Summary>Some info was loged on 10 May 2019 15:20:36</Summary>
+<Message>Document Webservice called</Message>
+</Activity>
+
+<Activity>
+<DateTime>10/05/2019 15:45:09</DateTime>
+<Summary>Some info was loged on 10 May 2019 15:45:09</Summary>
+<Message>Document Webservice called</Message>
+</Activity>
+
+<Activity>
+<DateTime>10/05/2019 15:50:43</DateTime>
+<Summary>Some info was loged on 10 May 2019 15:50:43</Summary>
+<Message>Document Webservice called</Message>
+</Activity>
+
+<Activity>
+<DateTime>10/05/2019 22:54:54</DateTime>
+<Summary>Some info was loged on 10 May 2019 22:54:54</Summary>
+<Message>Document Webservice called</Message>
+</Activity>
+
+<Activity>
+<DateTime>10/05/2019 23:21:04</DateTime>
+<Summary>Some info was loged on 10 May 2019 23:21:04</Summary>
+<Message>Document Webservice called</Message>
+</Activity>
+

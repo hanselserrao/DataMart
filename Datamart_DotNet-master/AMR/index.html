@@ -1,0 +1,249 @@
+﻿<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 container" >
+    <form>
+        <div class="row">
+            <div class="col-sm-8">
+                <h1>Problem Report Search</h1>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100" ng-init="getamrtype()">
+                        <label>AMR Type</label>
+                        <md-select name="amrType" ng-model="amrType.value" ng-keypress="AMRsearchformEnter($event)">
+                            <md-option value="{{current.value}}" selected>{{current.label}}</md-option>
+                            <md-option ng-repeat="x in amrtypelist" value="{{x.oid}}">{{x.name}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>Requestor Email</label>
+                        <input name="usrEmail" ng-keypress="AMRsearchformEnter($event)" ng-model="amrEmail">
+                    </md-input-container>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100" ng-init="getamrstatus()">
+                        <label>Request Status</label>
+                        <md-select name="amrStatus" ng-model="amrStatus.value" ng-keypress="AMRsearchformEnter($event)">
+                            <md-option value="{{current.value}}" selected>{{current.label}}</md-option>
+                            <md-option ng-repeat="x in amrstatuslist" value="{{x.oid}}">{{x.name}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>Item Number</label>
+                        <input name="usrEmail" ng-keypress="AMRsearchformEnter($event)" ng-model="amrItemNo">
+                    </md-input-container>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>Request Number</label>
+                        <input name="usrEmail" ng-keypress="AMRsearchformEnter($event)" ng-model="amrRequestNo">
+                    </md-input-container>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>New Material Code</label>
+                        <input name="usrEmail" ng-keypress="AMRsearchformEnter($event)" ng-model="amrNewMaterialCode">
+                    </md-input-container>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">
+                        <label>Part Description</label>
+                        <input name="usrEmail" ng-keypress="AMRsearchformEnter($event)" ng-model="amrPartDescription">
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div layout="row">
+                    <md-input-container flex="100">(Asterisk(*) can be used to perform wildcard searches)
+                    </md-input-container>
+                </div>
+            </div>
+
+            <div class="row search_button">
+                <div class="col-sm-12">
+
+                    <div class="col-sm-4">
+                        <md-button md-no-ink type="reset" ng-click="resetAMRSearch()" class="md-raised">CLEAR</md-button>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <md-button md-no-ink ng-click="AMRSearchForm()" class="md-raised md-primary">SEARCH</md-button>
+                    </div>
+                    <div class="col-sm-4">
+                        <md-button md-no-ink ng-click="DisplayProblemReport()" class="md-raised secondButton">CREATE PROBLEM REPORT</md-button>
+                    </div>
+                </div>
+            </div>
+    </form>
+    <div class="container table-responsive " ng-show="UserList">
+        <span>
+            <ul class="pagination pull-right" style="margin-top:30px; margin-bottom:0px;">
+                <li ng-class="{'active': item === criteria.page}" ng-repeat='item in paging.pagearray'>
+                    <a ng-if="item == 'Prev'" ng-click="Prev()">Prev</a>
+                    <a ng-if="(!(item == 'Prev' || item == 'Next' ||  item == '..' || item == '...'))"
+                       ng-click="criteria.page = item;">{{item}}</a>
+                    <a ng-if="(item == '..' || item == '...')">{{item}}</a>
+                    <a ng-if="item == 'Next'" ng-click="Next()">Next</a>
+                </li>
+            </ul>
+        </span>
+        <h2>Search Result</h2>
+        <div layout="row" ng-init="search()">
+            <!--@*<md-input-container flex="100">
+                <label>Search keyword...</label>
+                <input ng-model="criteria.searchtext" ng-model-options="{debounce {'default' 1000, 'blur'0}}">
+            </md-input-container>*@-->
+        </div>
+        <table class="table  table-hover table-condensed " style="color: #000;">
+            <thead>
+                <tr>
+                    <div class="row" style="background-color:#005eb8; padding:7px;color:white">
+                        <div class="col-lg-4 " ng-if="criteria">
+
+                            Showing: {{ amrlist.length>0?(criteria.page -1) * criteria.pagesize + 1:0}} -
+                            {{ amrlist.length>0?((criteria.page -1) * criteria.pagesize + paging.showing):0}}
+
+                            of {{paging.total}} Records
+                        </div>
+
+                        <div class="col-lg-3">
+                            Showing: Top  {{paging.total}} count of total records
+                        </div>
+                        <div class="col-lg-5 ">
+                            <div class="pull-right">
+                                Page: <input type='number'
+                                             ng-model='criteria.page'
+                                             min="1"
+                                             max="{{paging.totalpages}}"
+                                             style='width:70px;' />
+                                of {{paging.totalpages}}
+                                with page size <select ng-model="criteria.pagesize"
+                                                       ng-options="obj as obj for obj in paging.pagingOptions" />
+                            </div>
+                        </div>
+                    </div>
+
+                </tr>
+                <tr>
+
+                    <th ng-click="criteria.sort = 'item_no';">
+                        <i ng-click="expandCollapseAll( !isexpanded,amrlist);isexpanded=!isexpanded">
+                            <i ng-if="isexpanded" class="fa fa-minus"><img src="images/up.png" /></i>
+                            <i ng-if="!isexpanded" class="fa fa-plus"><img src="images/down.png" /></i>
+                        </i>
+                        Part Number
+                        <span class="fa fa-sort" ng-show="sortKey=='item_no'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                    <th ng-click="criteria.sort = 'amr_type';">
+                        AMR Type
+                        <span class="fa fa-sort" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('requested_by')">
+                        Requested By
+                        <span class="fa fa-sort" ng-show="sortKey=='requested_by'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('productcode')">
+                        Product
+                        <span class="fa fa-sort" ng-show="sortKey=='productcode'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('request_status')">
+                        Request Status
+                        <span class="fa fa-sort" ng-show="sortKey=='request_status'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('date_requested')">
+                        Date Requested
+                        <span class="fa fa-sort" ng-show="sortKey=='date_requested'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                    <th ng-click="sort('part_description')">
+                        Part Description
+                        <span class="fa fa-sort" ng-show="sortKey=='part_description'" ng-class="{'fa-chevron-up':reverse,'fa-chevron-down ':!reverse}"></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="table">
+                <tr class="animate" ng-repeat-start="amr in amrlist">
+                    <td>
+                        <i ng-if="amr.expanded" ng-click="amr.expanded = false" class="fa fa-minus"><img src="images/up.png" /></i>
+                        <i ng-if="!amr.expanded" ng-click="amr.expanded = true" class="fa fa-plus"><img src="images/down.png" /></i>
+                        &nbsp;&nbsp; <a class="two">{{amr.item_no}}</a>
+                    </td>
+                    <td>{{amr.amr_type}}</td>
+                    <td>{{amr.requested_by}}</td>
+                    <td>{{amr.productcode}}</td>
+                    <td>{{amr.request_status}}</td>
+                    <td>{{amr.date_requested}}</td>
+                    <td>{{amr.part_description}}</td>
+                    <tr ng-if="amr.expanded" ng-repeat-end="">
+                        <td colspan="8" style="background: #fff;">
+                            <table>
+                                <thead ng-if="amr.amr_type == 'AMR Request'">
+                                    <tr><th>Request Number:</th><td>{{amr.request_no}}</td> </tr>
+                                    <tr><th>New Material Code:</th><td>{{amr.new_material_code}}</td> </tr>
+                                    <tr><th>Drawing Number:</th><td>{{amr.drawing_no}}</td></tr>
+                                    <tr><th>Existing Material Code:</th><td>{{amr.existing_material_code}}</td></tr>
+                                    <tr><th>Site:</th><td>{{amr.site_desc}}</td></tr>
+                                    <tr><th>Priority:</th><td>{{amr.priority_desc}}</td></tr>
+                                    <tr><th>DCO:</th><td>{{amr.dco_desc}}</td></tr>
+                                    <tr><th>Due Date:</th><td>{{amr.due_date}}</td></tr>
+                                    <tr><th>Casting Requested:</th><td>{{amr.casting_requested}}</td></tr>
+                                </thead>
+                                <thead ng-if="amr.amr_type == 'Request For Basic Data'">
+                                    <tr><th>Request Number:</th><td>{{amr.request_no}}</td> </tr>
+                                    <tr><th>File Path:</th><td>{{amr.file_path}}</td> </tr>
+                                    <tr><th>Remarks:</th><td><span ng-bind-html="amr.remarks | nl2p"></span></td> </tr>
+                                </thead>
+                                <thead ng-if="amr.amr_type == 'Data Issue'">
+                                    <tr><th>Request Number:</th><td>{{amr.request_no}}</td> </tr>
+                                    <tr><th>File Path:</th><td>{{amr.file_path}}</td> </tr>
+                                    <tr><th>Issue Description:</th><td><span ng-bind-html="amr.remarks | nl2p"></span></td> </tr>
+                                </thead>
+                            </table>
+                        </td>
+                    </tr>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="pull-right">
+                <ul class="pagination">
+                    <li ng-class="{'active': item === criteria.page}" ng-repeat='item in paging.pagearray'>
+
+                        <a ng-if="item == 'Prev'" ng-click="Prev()">Prev</a>
+
+                        <a ng-if="(!(item == 'Prev' || item == 'Next' ||  item == '..' || item == '...'))"
+                           ng-click="criteria.page = item;">{{item}}</a>
+
+                        <!-- No click event -->
+                        <a ng-if="(item == '..' || item == '...')">{{item}}</a>
+
+                        <a ng-if="item == 'Next'" ng-click="Next()">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>

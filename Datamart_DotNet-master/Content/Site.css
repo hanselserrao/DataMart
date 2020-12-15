@@ -1,0 +1,14 @@
+﻿.dialogHeading{
+    color:#fff; background:#005eb8; text-align:center; font-size: 20px;font-family:'Times New Roman';
+}
+.disableButton{
+    opacity: 0.35; 
+    background: #eee;
+    color: #444;
+}
+.secondButton {
+    background:#8fc2f3!important;
+}
+.md-datepicker-input-container {
+    width: 100% !important;
+}
