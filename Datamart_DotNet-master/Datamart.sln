@@ -6,10 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datamart", "Datamart.csproj", "{59D7B334-5642-45CF-853C-3EE4248725B3}"
 EndProject
 Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
+	
 	
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
